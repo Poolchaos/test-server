@@ -107,7 +107,7 @@ router.get('/testsuites/:testSuiteId/test/:testId', async (req, res) => {
       return res.status(404).json({ error: 'Test not found in the Test Suite' });
     }
 
-    res.json(specificTest);
+    res.json({ testSuiteId: req.params.testSuiteId, ...specificTest });
   } catch (error) {
     console.error('An error occurred:', error);
     res.status(500).json({ error: 'Internal Server Error' });
