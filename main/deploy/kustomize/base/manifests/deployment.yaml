@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zai-test-service
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  template:
+    spec:
+      containers:
+      - name: zai-test-service
+        image: ZAI_TEST_SERVICE
+        ports:
+        - containerPort: 8000
+          name: http
+        livenessProbe:
+          httpGet:
+            path: /nginx_status
+            port: 8001
+          initialDelaySeconds: 30
+          periodSeconds: 60
+          timeoutSeconds: 30
+          failureThreshold: 5
+        readinessProbe:
+          httpGet:
+            path: /nginx_status
+            port: 8001
+          initialDelaySeconds: 0
+          periodSeconds: 5
+          timeoutSeconds: 2
+          failureThreshold: 1
+        resources:
+          requests:
+            memory: 32Mi
+            cpu: 20m
+          limits:
+            memory: 32Mi
+            cpu: 100m
+      imagePullSecrets:
+      - name: zailab.registry
