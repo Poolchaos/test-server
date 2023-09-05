@@ -4,10 +4,15 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const cors = require('cors');
+var mongoose = require('mongoose');
 
 var indexRouter = require('./routes/index');
 var envRouter = require('./routes/environments');
 var orgRouter = require('./routes/organisations');
+var runTestRouter = require('./routes/run-test');
+
+const uri = "mongodb://127.0.0.1:27017"; // Use the IPv4 loopback address
+mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
 
 var app = express();
 app.use(cors());
@@ -32,6 +37,7 @@ app.use((req, res, next) => {
 app.use('/', indexRouter);
 app.use('/environments', envRouter);
 app.use('/organisations', orgRouter);
+app.use('/automate', runTestRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

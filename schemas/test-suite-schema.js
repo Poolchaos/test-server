@@ -9,6 +9,7 @@ var TestSuiteSchema = new Schema({
     required: [true, 'No identifier specified']
   },
   name: String,
+  url: String,
   tests: [Schema.Types.Mixed]
 }, { collection : 'test-suites' });
 
