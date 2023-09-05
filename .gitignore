@@ -35,3 +35,6 @@ Thumbs.db
 /src/environment.ts
 /dist
 /test/coverage-jest
+/tests/
+/reports/
+/screenshots/

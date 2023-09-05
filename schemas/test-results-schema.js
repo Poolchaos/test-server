@@ -42,9 +42,12 @@ const TestResultSchema = Schema({
       },
       fixtures: [
         {
-          type: mongoose.Schema.Types.Mixed, // Allows any data type for fixtures
+          type: mongoose.Schema.Types.Mixed,
         },
       ],
+      generatedTest: {
+        type: mongoose.Schema.Types.Mixed,
+      },
     },
   ],
 }, { collection : 'test-results' });

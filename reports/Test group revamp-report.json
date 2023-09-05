@@ -1,6 +1,6 @@
 {
-  "startTime": "2023-09-05T09:11:16.474Z",
-  "endTime": "2023-09-05T09:13:12.658Z",
+  "startTime": "2023-09-05T17:14:19.954Z",
+  "endTime": "2023-09-05T17:15:51.882Z",
   "userAgents": [
     "Chrome 116.0.0.0 / Windows 11"
   ],
@@ -17,9 +17,9 @@
           "name": "Test group revamp",
           "meta": {},
           "errs": [],
-          "durationMs": 116072,
+          "durationMs": 91778,
           "unstable": false,
-          "screenshotPath": null,
+          "screenshotPath": "D:\\Workspace\\BE\\zai-test-server\\screenshots\\test-64f6ef230bb305897b7868d8",
           "skipped": false
         }
       ]

@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
+const path = require('path');
 const ObjectId = mongoose.Types.ObjectId;
 
 const fs = require('fs').promises;
@@ -10,7 +11,7 @@ const writeFile = util.promisify(fs.writeFile);
 const TestResultsModel = require('../models/test-results-model');
 
 router.post('/', async (req, res) => {
-  const { testId, name, browser, errorScreenshot, steps } = req.body;
+  const { testId, testSuiteId, name, browser, permissions, steps } = req.body;
   const testRunId = new ObjectId();
   const startTime = Date.now();
 
@@ -78,7 +79,7 @@ router.post('/', async (req, res) => {
           disableNativeAutomation: true
         };
   
-        if (errorScreenshot) {
+        if (permissions.errorScreenshot) {
           config.screenshots = {
             path: "./screenshots/",
             takeOnFails: true
@@ -102,11 +103,26 @@ router.post('/', async (req, res) => {
   
         console.log(' ::>> tests are done ');
         var hoteljsonFile = require('../reports/' + name + '-report.json');
+
+        const filePath = path.join(__dirname, '../tests/', name + '-test.js');
+        const testFile = await fs.readFile(filePath, 'utf-8');
         hoteljsonFile.startTime = startTime;
+        hoteljsonFile.generatedTest = testFile;
 
-
-
-
+        if (permissions.stepScreenshot) {
+          await Promise.all(steps.map(async (step, index) => {
+            if (step.groupName) {
+              await Promise.all(step.steps.map(async (innerStep, innerIndex) => {
+                innerStep.image = await fs.readFile(`./screenshots/test-${testId}/screenshot-${index}-${innerIndex}-${innerStep.name}-${startTime}.png`);
+                innerStep.thumbnail = await fs.readFile(`./screenshots/test-${testId}/thumbnails/screenshot-${index}-${innerIndex}-${innerStep.name}-${startTime}.png`);
+              }));
+            } else {
+              step.image = await fs.readFile(`./screenshots/test-${testId}/screenshot-${index}-${step.name}-${startTime}.png`);
+              step.thumbnail = await fs.readFile(`./screenshots/test-${testId}/thumbnails/screenshot-${index}-${step.name}-${startTime}.png`);
+            }
+          }));
+          hoteljsonFile.fixtures[0].tests[0].steps = steps;
+        }
 
         TestResultsModel.findOneAndUpdate(
           {
@@ -161,7 +177,7 @@ router.post('/', async (req, res) => {
       fileContent += `fixture('Single Agent').page('${url}');\n\n`;
       fileContent += `test('${name}', async (t) => {\n`;
 
-      const addStep = function(step) {
+      const addStep = function(step, index) {
         if (step.name === 'wait') {
           fileContent += `\tawait t.wait(${(step.config.durationInSeconds * 1000)});\n`;
         }
@@ -183,15 +199,19 @@ router.post('/', async (req, res) => {
         else if (step.name === 'Expect Content') {
           fileContent += `\tawait t.expect('${step.config.selector}').ok();\n`;
         }
+
+        if (permissions.stepScreenshot) {
+          fileContent += `\tawait t.takeScreenshot({ path: 'test-${testId}/screenshot-${index}-${step.name}-${startTime}.png' });\n`;
+        }
       }
   
       steps.forEach((step, index) => {
         if (step.groupName) {
-          step.steps.forEach(innerStep => {
-            addStep(innerStep);
+          step.steps.forEach((innerStep, innerIndex) => {
+            addStep(innerStep, index + '-' + innerIndex);
           });
         } else {
-          addStep(step);
+          addStep(step, index);
         }
       });
   
