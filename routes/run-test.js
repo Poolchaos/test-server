@@ -113,12 +113,20 @@ router.post('/', async (req, res) => {
           await Promise.all(steps.map(async (step, index) => {
             if (step.groupName) {
               await Promise.all(step.steps.map(async (innerStep, innerIndex) => {
-                innerStep.image = await fs.readFile(`./screenshots/test-${testId}/screenshot-${index}-${innerIndex}-${innerStep.name}-${startTime}.png`);
-                innerStep.thumbnail = await fs.readFile(`./screenshots/test-${testId}/thumbnails/screenshot-${index}-${innerIndex}-${innerStep.name}-${startTime}.png`);
+                try {
+                  innerStep.image = await fs.readFile(`./screenshots/test-${testId}-${startTime}/screenshot-${index}-${innerIndex}-${innerStep.name}.png`);
+                  innerStep.thumbnail = await fs.readFile(`./screenshots/test-${testId}-${startTime}/thumbnails/screenshot-${index}-${innerIndex}-${innerStep.name}.png`);
+                } catch(e) {
+                  innerStep.thumbnail = await fs.readFile('./static/no-image.jpg');
+                }
               }));
             } else {
-              step.image = await fs.readFile(`./screenshots/test-${testId}/screenshot-${index}-${step.name}-${startTime}.png`);
-              step.thumbnail = await fs.readFile(`./screenshots/test-${testId}/thumbnails/screenshot-${index}-${step.name}-${startTime}.png`);
+              try {
+                step.image = await fs.readFile(`./screenshots/test-${testId}-${startTime}/screenshot-${index}-${step.name}.png`);
+                step.thumbnail = await fs.readFile(`./screenshots/test-${testId}-${startTime}/thumbnails/screenshot-${index}-${step.name}.png`);
+              } catch(e) {
+                innerStep.thumbnail = await fs.readFile('./static/no-image.jpg');
+              }
             }
           }));
           hoteljsonFile.fixtures[0].tests[0].steps = steps;
@@ -159,7 +167,7 @@ router.post('/', async (req, res) => {
           });
   
       } catch(e) {
-        console.info(' ::>> error > ', e);
+        console.info(' ::>> error > 2', e);
       }
     }
   
@@ -187,6 +195,9 @@ router.post('/', async (req, res) => {
         else if (step.name === 'Click Element') {
           fileContent += `\tawait t.click(Selector('${step.config.selector}'));\n`;
         }
+        else if (step.name === 'Press Keyboard Key') {
+          fileContent += `\tawait t.pressKey('${step.config.selector}');\n`;
+        }
         else if (step.name === 'create') {
           fileContent += `\tconst user1Window = await t.openWindow('${step.config.url}', 'Test Window${step.config.identifier}');\n`;
         }
@@ -200,8 +211,23 @@ router.post('/', async (req, res) => {
           fileContent += `\tawait t.expect('${step.config.selector}').ok();\n`;
         }
 
+        else if (step.name === 'Trigger an API call') {
+
+          fileContent += `\tconst response = t.request.${step.config.method.toLowerCase()}({\n`;
+          fileContent += `\t\turl: '${step.config.URL}',\n`;
+          fileContent += `\t\tmethod: '${step.config.method}',\n`;
+          fileContent += `\t\ttimeout: 30000,\n`;
+          fileContent += `\t\theaders: ${JSON.stringify(step.config.headers)},\n`;
+          fileContent += `\t\tbody: ${JSON.stringify(step.config.body)},\n`;
+          fileContent += `\t\trawResponse: true\n`;
+          fileContent += `\t});\n`;
+    
+          fileContent += `\tawait t.expect(response.status).eql(202)\n`;
+
+        }
+
         if (permissions.stepScreenshot) {
-          fileContent += `\tawait t.takeScreenshot({ path: 'test-${testId}/screenshot-${index}-${step.name}-${startTime}.png' });\n`;
+          fileContent += `\tawait t.takeScreenshot({ path: 'test-${testId}-${startTime}/screenshot-${index}-${step.name}.png' });\n`;
         }
       }
   
@@ -237,7 +263,7 @@ router.post('/', async (req, res) => {
     }
 
   } catch(e) {
-    console.error(e);
+    console.info(' ::>> error > 1', e);
     res.status(500).json({ e: 'Internal Server Error' });
   }
 });

@@ -10,6 +10,7 @@ var indexRouter = require('./routes/index');
 var envRouter = require('./routes/environments');
 var orgRouter = require('./routes/organisations');
 var runTestRouter = require('./routes/run-test');
+var requestsRouter = require('./routes/requests');
 
 const uri = "mongodb://127.0.0.1:27017"; // Use the IPv4 loopback address
 mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
@@ -38,6 +39,7 @@ app.use('/', indexRouter);
 app.use('/environments', envRouter);
 app.use('/organisations', orgRouter);
 app.use('/automate', runTestRouter);
+app.use('/requests', requestsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
