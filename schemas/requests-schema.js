@@ -28,6 +28,6 @@ const RequestsSchema = new Schema({
     type: Map, // Use a Map to store key-value pairs of headers
     of: String
   }
-}, { collection: 'requests' });
+}, { collection: 'api-call-configs' });
 
 module.exports = RequestsSchema;

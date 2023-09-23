@@ -6,17 +6,31 @@ var logger = require('morgan');
 const cors = require('cors');
 var mongoose = require('mongoose');
 
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+
 var indexRouter = require('./routes/index');
 var envRouter = require('./routes/environments');
 var orgRouter = require('./routes/organisations');
 var runTestRouter = require('./routes/run-test');
 var requestsRouter = require('./routes/requests');
+var sitesRouter = require('./routes/sites');
 
-const uri = "mongodb://127.0.0.1:27017"; // Use the IPv4 loopback address
-mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
 
 var app = express();
+app.use(express.urlencoded({ extended: false }));
+app.use(passport.initialize());
 app.use(cors());
+
+const uri = "mongodb://127.0.0.1:27017/e2e-testing-projector"; // local db
+// const uri = "mongodb://projectionrw:ABWturARBF98MPlcQ4Y=@db0.api.dev1.zailab.com:27017/admin"; // dev db
+
+mongoose.connect(
+  uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  }
+);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -40,6 +54,9 @@ app.use('/environments', envRouter);
 app.use('/organisations', orgRouter);
 app.use('/automate', runTestRouter);
 app.use('/requests', requestsRouter);
+
+// Used for testing
+app.use('/sites', sitesRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
