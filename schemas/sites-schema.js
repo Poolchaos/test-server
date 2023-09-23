@@ -10,6 +10,6 @@ const SitesSchema = new Schema({
     type: String,
     required: [true, 'Name is required']
   }
-}, { collection: 'requests' });
+}, { collection: 'organisation-projector.displaySitesView' });
 
 module.exports = SitesSchema;

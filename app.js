@@ -10,6 +10,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 
 var indexRouter = require('./routes/index');
+var authRouter = require('./routes/auth');
 var envRouter = require('./routes/environments');
 var orgRouter = require('./routes/organisations');
 var runTestRouter = require('./routes/run-test');
@@ -50,6 +51,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/', indexRouter);
+app.use('/auth', authRouter);
 app.use('/environments', envRouter);
 app.use('/organisations', orgRouter);
 app.use('/automate', runTestRouter);
