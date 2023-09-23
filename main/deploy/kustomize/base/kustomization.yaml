@@ -7,4 +7,4 @@ resources:
 - manifests/ingress.yaml
 
 commonLabels:
-  project: zai-test-service
+  app: zai-test-service

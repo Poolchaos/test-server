@@ -10,5 +10,5 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
                 matchExpressions:
-                  - { key: "project", operator: In, values: [ 'zai-test-service' ] }
+                  - { key: "app", operator: In, values: [ 'NAME' ] }
               topologyKey: "kubernetes.io/hostname"

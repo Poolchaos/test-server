@@ -13,5 +13,5 @@ spec:
         backend:
           service:
             name: zai-test-service
-            port:
-              name: http    
+            port: 
+              name: http          

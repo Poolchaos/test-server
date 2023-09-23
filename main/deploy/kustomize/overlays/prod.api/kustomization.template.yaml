@@ -17,3 +17,15 @@ patches:
 
 patchesStrategicMerge:
   - patches/pod-affinity.yaml
+
+replacements:
+- source:
+    kind: Deployment
+    name: zai-test-service
+    fieldPath: metadata.labels.app
+  targets:
+  - select:
+      name: zai-test-service
+      kind: Deployment
+    fieldPaths:
+    - spec.template.spec.affinity.podAntiAffinity.requiredDuringSchedulingIgnoredDuringExecution.0.labelSelector.matchExpressions.[key=app].values.0
