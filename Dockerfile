@@ -6,6 +6,8 @@ ENV     USER=root HOME=/tmp
 COPY    ./nginx.conf /etc/nginx/conf.d/default.conf
 ADD     . .
 
-ENTRYPOINT npm start
+FROM node:18.14.0
 
-EXPOSE  8000
+EXPOSE  3000
+
+CMD ["npm", "start"]
