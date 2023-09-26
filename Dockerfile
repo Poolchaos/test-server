@@ -4,8 +4,6 @@ FROM nginx:1.13.8-alpine
 # Environmental variables
 ENV USER=root HOME=/tmp
 
-WORKDIR /test-server
-
 ADD . .
 
 # Install Node.js and npm together
