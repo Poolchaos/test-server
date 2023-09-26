@@ -6,25 +6,23 @@ ENV     USER=root HOME=/tmp
 COPY    ./nginx.conf /etc/nginx/conf.d/default.conf
 ADD     . .
 
-RUN apk update && apk upgrade && apk add chromium chromium-chromedriver
+# Install Node.js and npm
+RUN apk update && apk upgrade && apk add nodejs npm
 
-# Symlink Chromium so it's accessible as "chrome" (optional)
-RUN ln -s /usr/bin/chromium-browser /usr/bin/chrome
+# Set the working directory in the container
+WORKDIR /app
 
+# Copy package.json and package-lock.json to the container
+COPY package*.json ./
 
-RUN apt-get update && apt-get install -y curl
+# Install application dependencies
+RUN npm install
 
-# Install Node.js and npm using NodeSource repository
-RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
-RUN apt-get install -y nodejs
+# Copy the rest of your application source code to the container
+COPY . .
 
-# Verify the installed Node.js and npm versions
-RUN node -v
-RUN npm -v
+# Expose the port your application will run on
+EXPOSE 3000
 
-# ENTRYPOINT npm start
-
-EXPOSE  3000
-
-# Define the command to start your Express.js app
+# Define the command to start your Node.js application
 CMD ["npm", "start"]
