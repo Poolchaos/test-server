@@ -4,12 +4,6 @@ FROM nginx:1.13.8-alpine
 # Environmental variables
 ENV USER=root HOME=/tmp
 
-# Set the working directory within the container
-WORKDIR /app
-
-# Copy the package.json and package-lock.json files and install dependencies
-COPY package*.json ./
-
 # Copy the rest of your project files
 COPY . .
 # Install Node.js and npm together
@@ -19,7 +13,7 @@ RUN apk add --no-cache wget && \
     apk del .build-deps
 
 # Define the command to start your Node.js application
-CMD ["node", "index.js"]
+CMD ["node", "."]
 
 # Expose the port your application will run on
 EXPOSE 8000
