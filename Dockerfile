@@ -10,7 +10,7 @@ ADD . .
 RUN apk add --no-cache nodejs
 
 # Expose the port your application will run on
-EXPOSE 3000
+EXPOSE 8000
 
 # Define the command to start your Node.js application
-CMD ["node", "index.js"]  # Replace "index.js" with your app's entry point
+CMD ["node", "./bin/www"]
