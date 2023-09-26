@@ -4,8 +4,15 @@ FROM nginx:1.13.8-alpine
 # Environmental variables
 ENV USER=root HOME=/tmp
 
-ADD . .
+# Set the working directory within the container
+WORKDIR /app
 
+# Copy the package.json and package-lock.json files and install dependencies
+COPY package*.json ./
+RUN npm install
+
+# Copy the rest of your project files
+COPY . .
 # Install Node.js and npm together
 RUN apk add --no-cache wget && \
     apk add --no-cache --virtual .build-deps curl && \
