@@ -7,7 +7,10 @@ ENV USER=root HOME=/tmp
 ADD . .
 
 # Install Node.js and npm together
-RUN apk add --no-cache nodejs
+RUN apk add --no-cache wget && \
+    apk add --no-cache --virtual .build-deps curl && \
+    wget -qO- https://nodejs.org/dist/v18.14.0/node-v18.14.0-linux-x64.tar.xz | tar -xJf - -C /usr/local --strip-components=1 && \
+    apk del .build-deps
 
 # Expose the port your application will run on
 EXPOSE 8000
