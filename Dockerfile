@@ -1,16 +1,16 @@
-FROM node:14
+# Use nginx:1.13.8-alpine as a base image
+FROM nginx:1.13.8-alpine
 
 # Environmental variables
-ENV     USER=root HOME=/tmp
+ENV USER=root HOME=/tmp
 
-COPY    ./nginx.conf /etc/nginx/conf.d/default.conf
-ADD     . .
+ADD . .
 
-# Install Node.js and npm
-RUN apk update && apk upgrade && apk add nodejs npm
+# Install Node.js and npm together
+RUN apk add --no-cache nodejs
 
 # Expose the port your application will run on
 EXPOSE 3000
 
 # Define the command to start your Node.js application
-CMD ["npm", "start"]
+CMD ["node", "index.js"]  # Replace "index.js" with your app's entry point
