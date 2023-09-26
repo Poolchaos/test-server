@@ -6,8 +6,16 @@ ENV     USER=root HOME=/tmp
 COPY    ./nginx.conf /etc/nginx/conf.d/default.conf
 ADD     . .
 
-FROM node:18.14.0
+RUN apt-get update && apt-get install -y curl
 
-EXPOSE  3000
+# Install Node.js and npm using NodeSource repository
+RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
+RUN apt-get install -y nodejs
 
-CMD ["npm", "start"]
+# Verify the installed Node.js and npm versions
+RUN node -v
+RUN npm -v
+
+ENTRYPOINT npm start
+
+EXPOSE  8000
