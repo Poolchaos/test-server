@@ -23,15 +23,22 @@ app.use(express.urlencoded({ extended: false }));
 app.use(passport.initialize());
 app.use(cors());
 
-const uri = "mongodb://127.0.0.1:27017/e2e-testing-projector"; // local db
-// const uri = "mongodb://projectionrw:ABWturARBF98MPlcQ4Y=@db0.api.dev1.zailab.com:27017/admin"; // dev db
+// const uri = "mongodb://127.0.0.1:27017/e2e-testing-projector"; // local db
+// const uri = "mongodb://192.168.1.6:27017/e2e-testing-projector"; // local db from docker container
+const uri = "mongodb://projectionrw:ABWturARBF98MPlcQ4Y=@192.168.3.36:27017/admin"; // dev db
 
+console.log('Connecting to mongo ...');
 mongoose.connect(
   uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   }
-);
+).then(() => {
+  console.log('Connected to MongoDB');
+})
+.catch((error) => {
+  console.error('Error connecting to MongoDB:', error);
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

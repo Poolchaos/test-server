@@ -1,10 +1,11 @@
 #!/usr/bin/env node
+console.log('Server is starting...');
 
 /**
  * Module dependencies.
  */
 
-var app = require('../app');
+var app = require('./app');
 var debug = require('debug')('zai-test-service:server');
 var http = require('http');
 
