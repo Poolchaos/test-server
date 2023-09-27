@@ -12,49 +12,45 @@ let dependencies = {
   mongoose: null,
   passport: null
 };
+let routes = {};
 
 function load(variable, dependency) {
-  console.log('App | Loading dependencies | ' + dependency);
+  console.log('App | Loading third party dependency | ' + dependency);
   try {
     dependencies[variable] = require(dependency);
-    console.log('App | Loading third party dependencies | ' + dependency + ' loaded ');
+    console.log('App | Loading third party dependency | ' + dependency + ' loaded ');
   } catch(e) {
     console.log('ERROR | Failed to load ' + dependency + ' due to:', e);
   }
 }
 
-// var createError = require('http-errors');
+function loadRoute(route, dependency) {
+  console.log('App | Loading file | ' + dependency);
+  try {
+    routes[route] = require(dependency);
+    console.log('App | Loading file | ' + dependency + ' loaded ');
+  } catch(e) {
+    console.log('ERROR | Failed to load ' + dependency + ' due to:', e);
+  }
+}
+
 load('createError', 'http-errors');
-
-// var express = require('express');
 load('express', 'express');
-
-// var path = require('path');
 load('path', 'path');
-
-// var cookieParser = require('cookie-parser');
 load('cookieParser', 'cookie-parser');
-
-// var logger = require('morgan');
 load('logger', 'morgan');
-
-// const cors = require('cors');
 load('cors', 'cors');
-
-// var mongoose = require('mongoose');
 load('mongoose', 'mongoose');
-
-// const passport = require('passport');
 load('passport', 'passport');
 
-console.log('App | Loading dependencies...');
-var indexRouter = require('./routes/index');
-var authRouter = require('./routes/auth');
-var envRouter = require('./routes/environments');
-var orgRouter = require('./routes/organisations');
-var runTestRouter = require('./routes/run-test');
-var requestsRouter = require('./routes/requests');
-var sitesRouter = require('./routes/sites');
+console.log('App | Loading routes...');
+loadRoute('indexRouter', './routes/index');
+loadRoute('authRouter', './routes/auth');
+loadRoute('envRouter', './routes/environments');
+loadRoute('orgRouter', './routes/organisations');
+loadRoute('runTestRouter', './routes/run-test');
+loadRoute('requestsRouter', './routes/requests');
+loadRoute('sitesRouter', './routes/sites');
 
 console.log('App | Dependencies... Loaded');
 
@@ -97,15 +93,15 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/', indexRouter);
-app.use('/auth', authRouter);
-app.use('/environments', envRouter);
-app.use('/organisations', orgRouter);
-app.use('/automate', runTestRouter);
-app.use('/requests', requestsRouter);
+app.use('/', routes.indexRouter);
+app.use('/auth', routes.authRouter);
+app.use('/environments', routes.envRouter);
+app.use('/organisations', routes.orgRouter);
+app.use('/automate', routes.runTestRouter);
+app.use('/requests', routes.requestsRouter);
 
 // Used for testing
-app.use('/sites', sitesRouter);
+app.use('/sites', routes.sitesRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
