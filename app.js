@@ -34,12 +34,12 @@ function load(variable, dependency) {
 }
 
 function loadRoute(route, dependency) {
-  log('App | Loading file | ' + dependency);
+  log('App | Loading resource | ' + dependency);
   try {
     routes[route] = require(dependency);
-    log('App | Loading file | ' + dependency + ' loaded ');
+    log('App | Loading resource | ' + dependency + ' loaded ');
   } catch(e) {
-    log('ERROR | Failed to load ' + dependency + ' due to:', e);
+    log('ERROR | Failed to load resource ' + dependency + ' due to:', e);
   }
 }
 
@@ -51,15 +51,17 @@ load('cookieParser', 'cookie-parser');
 load('logger', 'morgan');
 load('mongoose', 'mongoose');
 load('passport', 'passport');
+load('compression', 'compression');
+// load('helmet', 'helmet');
 
 log('App | Loading routes...');
-loadRoute('indexRouter', './routes/index');
-loadRoute('authRouter', './routes/auth');
-loadRoute('envRouter', './routes/environments');
-loadRoute('orgRouter', './routes/organisations');
-loadRoute('runTestRouter', './routes/run-test');
-loadRoute('requestsRouter', './routes/requests');
-loadRoute('sitesRouter', './routes/sites');
+loadRoute('indexRouter', './src/routes/index');
+loadRoute('authRouter', './src/routes/auth');
+loadRoute('envRouter', './src/routes/environments');
+loadRoute('orgRouter', './src/routes/organisations');
+loadRoute('runTestRouter', './src/routes/run-test');
+loadRoute('requestsRouter', './src/routes/requests');
+loadRoute('sitesRouter', './src/routes/sites');
 
 log('App | Dependencies... Loaded');
 
@@ -67,6 +69,15 @@ var app = dependencies.express();
 app.use(dependencies.express.urlencoded({ extended: false }));
 app.use(dependencies.passport.initialize());
 app.use(dependencies.cors());
+app.use(dependencies.compression());
+// app.use(
+//   helmet.contentSecurityPolicy({
+//     directives: {
+//       "script-src": ["'self'", "code.jquery.com", "cdn.jsdelivr.net"],
+//     },
+//   }),
+// );
+
 
 // const uri = "mongodb://127.0.0.1:27017/e2e-testing-projector"; // local db
 // const uri = "mongodb://192.168.1.6:27017/e2e-testing-projector"; // local db from docker container
