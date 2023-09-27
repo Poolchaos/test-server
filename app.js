@@ -35,13 +35,13 @@ function loadRoute(route, dependency) {
 }
 
 load('createError', 'http-errors');
-load('express', 'express');
 load('path', 'path');
 load('cookieParser', 'cookie-parser');
 load('logger', 'morgan');
 load('cors', 'cors');
 load('mongoose', 'mongoose');
 load('passport', 'passport');
+load('express', 'express');
 
 console.log('App | Loading routes...');
 loadRoute('indexRouter', './routes/index');
