@@ -1,10 +1,13 @@
 var moment = require('moment')
 
-const getTimestamp = (req, res) => {
-  return moment().format('HH:mm:ss')
+const getTimestamp = () => {
+  return moment().format('YYYY-MM-DD HH:mm:ss')
 };
+const log = (value, data) => {
+  console.log('\u001B[34m' + getTimestamp() + '\u001B[0m' + ' - ' + value, (data || ''));
+}
 
-console.log(getTimestamp() + ' - Server is starting...');
+log('Server is starting...');
 
 /**
  * Module dependencies.
@@ -13,24 +16,24 @@ console.log(getTimestamp() + ' - Server is starting...');
 
 // Add a global uncaught exception handler
 process.on('uncaughtException', function (err) {
-  console.log(getTimestamp() + ' - Error: Uncaught exception:', err);
+  log('Error: Uncaught exception:', err);
   // You may want to gracefully shut down the server or perform other cleanup here
 });
 
 // Add a global unhandled promise rejection handler
 process.on('unhandledRejection', function (reason, promise) {
-  console.log(getTimestamp() + ' - Error: Unhandled promise rejection at:', promise, 'reason:', reason);
+  log('Error: Unhandled promise rejection at:', promise, 'reason:', reason);
   // You may want to handle or log the rejection reason here
 });
 
 
-console.log(getTimestamp() + ' - Getting dependencies...');
+log('Getting dependencies...');
 var app = require('./app');
-console.log(getTimestamp() + ' - Getting dependencies... 1 ');
+log('Getting dependencies... 1 ');
 var debug = require('debug')('zai-test-service:server');
-console.log(getTimestamp() + ' - Getting dependencies... 2 ');
+log('Getting dependencies... 2 ');
 var http = require('http');
-console.log(getTimestamp() + ' - Continuing after dependencies...');
+log('Continuing after dependencies...');
 
 /**
  * Get port from environment and store in Express.
@@ -52,7 +55,7 @@ var server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
-console.log(getTimestamp() + ' - Server is listening...');
+log('Server is listening...');
 
 /**
  * Normalize a port into a number, string, or false.
@@ -113,5 +116,5 @@ function onListening() {
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
-  debug(getTimestamp() + ' - Listening on ' + bind);
+  debug('Listening on ' + bind);
 }

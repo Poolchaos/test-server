@@ -1,6 +1,15 @@
-console.log('App | Loading...');
+var moment = require('moment')
 
-console.log('App | Loading third party dependencies...');
+const getTimestamp = () => {
+  return moment().format('YYYY-MM-DD HH:mm:ss')
+};
+const log = (value, data) => {
+  console.log('\u001B[34m' + getTimestamp() + '\u001B[0m' + ' - ' + value, (data || ''));
+}
+
+log('App | Loading...');
+
+log('App | Loading third party dependencies...');
 
 let dependencies = {
   createError: null,
@@ -15,22 +24,22 @@ let dependencies = {
 let routes = {};
 
 function load(variable, dependency) {
-  console.log('App | Loading third party dependency | ' + dependency);
+  log('App | Loading third party dependency | ' + dependency);
   try {
     dependencies[variable] = require(dependency);
-    console.log('App | Loading third party dependency | ' + dependency + ' loaded ');
+    log('App | Loading third party dependency | ' + dependency + ' loaded ');
   } catch(e) {
-    console.log('ERROR | Failed to load ' + dependency + ' due to:', e);
+    log('ERROR | Failed to load ' + dependency + ' due to:', e);
   }
 }
 
 function loadRoute(route, dependency) {
-  console.log('App | Loading file | ' + dependency);
+  log('App | Loading file | ' + dependency);
   try {
     routes[route] = require(dependency);
-    console.log('App | Loading file | ' + dependency + ' loaded ');
+    log('App | Loading file | ' + dependency + ' loaded ');
   } catch(e) {
-    console.log('ERROR | Failed to load ' + dependency + ' due to:', e);
+    log('ERROR | Failed to load ' + dependency + ' due to:', e);
   }
 }
 
@@ -43,7 +52,7 @@ load('logger', 'morgan');
 load('mongoose', 'mongoose');
 load('passport', 'passport');
 
-console.log('App | Loading routes...');
+log('App | Loading routes...');
 loadRoute('indexRouter', './routes/index');
 loadRoute('authRouter', './routes/auth');
 loadRoute('envRouter', './routes/environments');
@@ -52,7 +61,7 @@ loadRoute('runTestRouter', './routes/run-test');
 loadRoute('requestsRouter', './routes/requests');
 loadRoute('sitesRouter', './routes/sites');
 
-console.log('App | Dependencies... Loaded');
+log('App | Dependencies... Loaded');
 
 var app = dependencies.express();
 app.use(dependencies.express.urlencoded({ extended: false }));
@@ -63,14 +72,14 @@ app.use(dependencies.cors());
 // const uri = "mongodb://192.168.1.6:27017/e2e-testing-projector"; // local db from docker container
 const uri = "mongodb://projectionrw:ABWturARBF98MPlcQ4Y=@192.168.3.36:27017/admin"; // dev db
 
-console.log('Connecting to mongo ...');
+log('Connecting to mongo ...');
 dependencies.mongoose.connect(
   uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   }
 ).then(() => {
-  console.log('Connected to MongoDB');
+  log('Connected to MongoDB');
 })
 .catch((error) => {
   console.error('Error connecting to MongoDB:', error);
