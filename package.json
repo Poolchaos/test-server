@@ -24,6 +24,7 @@
     "node-jsencrypt": "^1.0.0",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
+    "path": "^0.12.7",
     "testcafe": "^3.1.0",
     "testcafe-browser-provider-browserstack": "^1.15.1",
     "util": "^0.12.5"
