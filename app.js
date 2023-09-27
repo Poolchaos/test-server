@@ -1,3 +1,6 @@
+console.log('App | Loading...');
+
+console.log('App | Loading third party dependencies...');
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -7,8 +10,8 @@ const cors = require('cors');
 var mongoose = require('mongoose');
 
 const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
 
+console.log('App | Loading dependencies...');
 var indexRouter = require('./routes/index');
 var authRouter = require('./routes/auth');
 var envRouter = require('./routes/environments');
@@ -17,6 +20,7 @@ var runTestRouter = require('./routes/run-test');
 var requestsRouter = require('./routes/requests');
 var sitesRouter = require('./routes/sites');
 
+console.log('App | Dependencies... Loaded');
 
 var app = express();
 app.use(express.urlencoded({ extended: false }));
