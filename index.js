@@ -14,7 +14,7 @@ process.on('uncaughtException', function (err) {
 
 // Add a global unhandled promise rejection handler
 process.on('unhandledRejection', function (reason, promise) {
-  console.error('Error: Unhandled promise rejection at:', promise, 'reason:', reason);
+  console.log('Error: Unhandled promise rejection at:', promise, 'reason:', reason);
   // You may want to handle or log the rejection reason here
 });
 

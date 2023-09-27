@@ -16,7 +16,7 @@ COPY . .
 
 # Define the command to start your Node.js application
 # CMD ["node", "."]
-ENTRYPOINT ["node", "."]
+ENTRYPOINT ["node", "--inspect=0.0.0.0:9229", "."]
 
 # Expose the port your application will run on
 EXPOSE 8000
