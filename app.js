@@ -15,8 +15,12 @@ let dependencies = {
 
 function load(variable, dependency) {
   console.log('App | Loading dependencies | ' + dependency);
-  dependencies[variable] = require(dependency);
-  console.log('App | Loading third party dependencies | ' + dependency + ' loaded ');
+  try {
+    dependencies[variable] = require(dependency);
+    console.log('App | Loading third party dependencies | ' + dependency + ' loaded ');
+  } catch(e) {
+    console.log('ERROR | Failed to load ' + dependency + ' due to:', e);
+  }
 }
 
 // var createError = require('http-errors');
