@@ -5,7 +5,16 @@ console.log('App | Loading third party dependencies | http-errors ');
 var createError = require('http-errors');
 console.log('App | Loading third party dependencies | http-errors loaded ');
 console.log('App | Loading third party dependencies | express ');
-var express = require('express');
+
+var express;
+
+try {
+  express = require('express');
+} catch(e) {
+  console.log(' ----------- an error occured loading express ', e);
+}
+
+
 console.log('App | Loading third party dependencies | express loaded ');
 console.log('App | Loading third party dependencies | path ');
 var path = require('path');
