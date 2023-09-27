@@ -15,7 +15,7 @@ RUN npm install
 COPY . .
 
 # Expose the port your application will run on
-EXPOSE 9000
+EXPOSE 8000
 
 # Define the command to start your Node.js application
 ENTRYPOINT ["node", "--inspect=0.0.0.0:9229", "."]

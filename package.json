@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node ./bin/www",
     "build": "",
-    "deploy-local": "docker stop zailab & docker rm zailab & docker build -t zai-test-server:18.14.0 . & docker run --network=zai-test -d -p 9000:9000 --name zailab zai-test-server:18.14.0",
+    "deploy-local": "docker stop zailab & docker rm zailab & docker build -t zai-test-server:18.14.0 . & docker run --network=zai-test -d -p 8000:8000 --name zailab zai-test-server:18.14.0",
     "prune": "docker container prune",
     "restart": "docker restart zai-test-server:18.14.0"
   },

@@ -4,7 +4,7 @@
 $ `docker build -t zai-test-server:18.14.0 .`
 
 ## Start the container
-$ `docker run -d -p 9000:9000 --name zailab zai-test-server:18.14.0`
+$ `docker run -d -p 8000:8000 --name zailab zai-test-server:18.14.0`
 
 ### Use Host Network Mode (Linux only)
 $ `--network host`

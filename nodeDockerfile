@@ -10,5 +10,5 @@ ADD     ./favicon.ico              /favicon.ico
 RUN     npm install git+https://zaijenkins:Zcutp123@bitbucket.org/zaralab/plugin-environment-js#feature/refactor && \
         npm install git+https://zaijenkins:Zcutp123@bitbucket.org/zaralab/web-server -g && \
 
-EXPOSE  9000
+EXPOSE  8000
 ENTRYPOINT ["node", "--inspect=0.0.0.0:9229", "."]

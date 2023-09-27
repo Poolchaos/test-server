@@ -14,12 +14,12 @@ spec:
       - name: zai-test-service
         image: ZAI_TEST_SERVICE
         ports:
-        - containerPort: 9000
+        - containerPort: 8000
           name: http
         livenessProbe:
           httpGet:
             path: /
-            port: 9000
+            port: 8000
           initialDelaySeconds: 30
           periodSeconds: 60
           timeoutSeconds: 30
@@ -27,7 +27,7 @@ spec:
         readinessProbe:
           httpGet:
             path: /
-            port: 9000
+            port: 8000
           initialDelaySeconds: 0
           periodSeconds: 5
           timeoutSeconds: 2
