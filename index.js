@@ -9,11 +9,6 @@ const log = (value, data) => {
 
 log('Server is starting...');
 
-/**
- * Module dependencies.
- */
-
-
 // Add a global uncaught exception handler
 process.on('uncaughtException', function (err) {
   log('Error: Uncaught exception:', err);

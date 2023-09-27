@@ -19,5 +19,5 @@ COPY . .
 ENTRYPOINT ["node", "--inspect=0.0.0.0:9229", "."]
 
 # Expose the port your application will run on
-EXPOSE 8000
+EXPOSE 9000
 
