@@ -1,5 +1,10 @@
-#!/usr/bin/env node
-console.log('Server is starting...');
+var moment = require('moment')
+
+const getTimestamp = (req, res) => {
+  return moment().format('HH:mm:ss')
+};
+
+console.log(getTimestamp() + ' - Server is starting...');
 
 /**
  * Module dependencies.
@@ -8,24 +13,24 @@ console.log('Server is starting...');
 
 // Add a global uncaught exception handler
 process.on('uncaughtException', function (err) {
-  console.log('Error: Uncaught exception:', err);
+  console.log(getTimestamp() + ' - Error: Uncaught exception:', err);
   // You may want to gracefully shut down the server or perform other cleanup here
 });
 
 // Add a global unhandled promise rejection handler
 process.on('unhandledRejection', function (reason, promise) {
-  console.log('Error: Unhandled promise rejection at:', promise, 'reason:', reason);
+  console.log(getTimestamp() + ' - Error: Unhandled promise rejection at:', promise, 'reason:', reason);
   // You may want to handle or log the rejection reason here
 });
 
 
-console.log('Getting dependencies...');
+console.log(getTimestamp() + ' - Getting dependencies...');
 var app = require('./app');
-console.log('Getting dependencies... 1 ');
+console.log(getTimestamp() + ' - Getting dependencies... 1 ');
 var debug = require('debug')('zai-test-service:server');
-console.log('Getting dependencies... 2 ');
+console.log(getTimestamp() + ' - Getting dependencies... 2 ');
 var http = require('http');
-console.log('Continuing after dependencies...');
+console.log(getTimestamp() + ' - Continuing after dependencies...');
 
 /**
  * Get port from environment and store in Express.
@@ -47,7 +52,7 @@ var server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
-console.log('Server is listening...');
+console.log(getTimestamp() + ' - Server is listening...');
 
 /**
  * Normalize a port into a number, string, or false.
@@ -108,5 +113,5 @@ function onListening() {
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+  debug(getTimestamp() + ' - Listening on ' + bind);
 }
