@@ -1,6 +1,6 @@
-var express = require('express');
+import express from 'express';
 var router = express.Router();
-const EnvironmentsModel = require('../models/environments-model');
+import EnvironmentsModel from '../models/environments-model';
 
 router.get('/', async (req, res) => {
   try {
@@ -12,4 +12,4 @@ router.get('/', async (req, res) => {
   }
 });
   
-module.exports = router;
+export default router;

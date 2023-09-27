@@ -1,13 +1,15 @@
-var moment = require('moment')
+console.log('Server is starting...');
 
+import moment from 'moment';
+
+// @ts-ignore
 const getTimestamp = () => {
   return moment().format('YYYY-MM-DD HH:mm:ss')
 };
-const log = (value, data) => {
+// @ts-ignore
+const log = (value, data?) => {
   console.log('\u001B[34m' + getTimestamp() + '\u001B[0m - ' + value, (data || ''));
 }
-
-log('Server is starting...');
 
 // Add a global uncaught exception handler
 process.on('uncaughtException', function (err) {
@@ -17,17 +19,19 @@ process.on('uncaughtException', function (err) {
 
 // Add a global unhandled promise rejection handler
 process.on('unhandledRejection', function (reason, promise) {
-  log('Error: Unhandled promise rejection at:', promise, 'reason:', reason);
+  log('Error: Unhandled promise rejection at:', { promise, reason });
   // You may want to handle or log the rejection reason here
 });
 
 
 log('Getting dependencies...');
-var app = require('./app');
+import app from './src/app';
 log('Getting dependencies... 1 ');
-var debug = require('debug')('zai-test-service:server');
+// import * as debug from 'debug';
 log('Getting dependencies... 2 ');
-var http = require('http');
+// const debugInstance = debug('zai-test-service:server');
+// log('Getting dependencies... 3 ');
+import http from 'http';
 log('Continuing after dependencies...');
 
 /**
@@ -111,5 +115,5 @@ function onListening() {
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+    log('Application started | Listening on ' + bind);
 }

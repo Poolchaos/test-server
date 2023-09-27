@@ -1,4 +1,4 @@
-var mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 //Define a schema
 var Schema = mongoose.Schema;
@@ -13,4 +13,4 @@ var TestSuiteSchema = new Schema({
   tests: [Schema.Types.Mixed]
 }, { collection : 'test-suites' });
 
-module.exports = TestSuiteSchema;
+export default TestSuiteSchema;

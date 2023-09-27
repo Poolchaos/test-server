@@ -1,6 +1,6 @@
-var express = require('express');
+import express from 'express';
 var router = express.Router();
-const RequestsModel = require('../models/requests-model');
+import RequestsModel from '../models/requests-model';
 
 router.get('/', async (req, res) => {
   try {
@@ -12,4 +12,4 @@ router.get('/', async (req, res) => {
   }
 });
   
-module.exports = router;
+export default router;

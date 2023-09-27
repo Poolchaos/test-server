@@ -1,4 +1,4 @@
-var mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 //Define a schema
 var Schema = mongoose.Schema;
@@ -12,4 +12,4 @@ var OrganisationsSchema = new Schema({
   users: [Schema.Types.Mixed]
 }, { collection : 'organisations' });
 
-module.exports = OrganisationsSchema;
+export default OrganisationsSchema;

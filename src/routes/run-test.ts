@@ -1,14 +1,14 @@
-var express = require('express');
+import express from 'express';
 var router = express.Router();
-var mongoose = require('mongoose');
-const path = require('path');
+import mongoose from 'mongoose';
+import path from 'path';
 const ObjectId = mongoose.Types.ObjectId;
 
-const fs = require('fs').promises;
-const util = require('util')
+import { promises as fs } from 'fs';
+import util from 'util';
 const writeFile = util.promisify(fs.writeFile);
 
-const TestResultsModel = require('../models/test-results-model');
+import TestResultsModel from '../models/test-results-model';
 
 router.post('/', async (req, res) => {
   const { testId, testSuiteId, name, browser, permissions, steps } = req.body;
@@ -80,6 +80,7 @@ router.post('/', async (req, res) => {
         };
   
         if (permissions.errorScreenshot) {
+          // @ts-ignore
           config.screenshots = {
             path: "./screenshots/",
             takeOnFails: true
@@ -125,6 +126,7 @@ router.post('/', async (req, res) => {
                 step.image = await fs.readFile(`./screenshots/test-${testId}-${startTime}/screenshot-${index}-${step.name}.png`);
                 step.thumbnail = await fs.readFile(`./screenshots/test-${testId}-${startTime}/thumbnails/screenshot-${index}-${step.name}.png`);
               } catch(e) {
+                // @ts-ignore
                 innerStep.thumbnail = await fs.readFile('./static/no-image.jpg');
               }
             }
@@ -247,7 +249,7 @@ router.post('/', async (req, res) => {
       const filePath = `tests/${name}-test.js`;
   
       console.info('Attempt writing ');
-  
+      // @ts-ignore
       writeFile(filePath, fileContent);
   
       setTimeout(() => {
@@ -288,6 +290,7 @@ router.get('/results', async (req, res) => {
     console.info(' ::>> testId >>> ' + testId);
     try {
       const testResults = await TestResultsModel.findOne({ testId });
+      // @ts-ignore
       const specificTest = testResults.results.find(result => result._id.toString() === testResultId);
       res.json(specificTest);
     } catch (error) {
@@ -325,11 +328,11 @@ router.get('/results', async (req, res) => {
       await testcafe.close();
   
       console.log(' ::>> tests are done ');
-      var hoteljsonFile = require("../report.json");
+      var hoteljsonFile = require("../reports/report.json");
       res.json(hoteljsonFile);
     } catch(e) {
       console.info(' ::>> error > ', e);
     }
   });
 
-module.exports = router;
+export default router;

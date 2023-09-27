@@ -34,10 +34,10 @@ spec:
           failureThreshold: 1
         resources:
           requests:
-            memory: 16Mi
-            cpu: 20m
+            memory: 256Mi
+            cpu: 200m
           limits:
-            memory: 16Mi
-            cpu: 100m
+            memory: 256Mi
+            cpu: 200m
       imagePullSecrets:
       - name: zailab.registry
