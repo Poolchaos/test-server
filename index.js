@@ -5,9 +5,11 @@ console.log('Server is starting...');
  * Module dependencies.
  */
 
+console.log('Getting dependencies...');
 var app = require('./app');
 var debug = require('debug')('zai-test-service:server');
 var http = require('http');
+console.log('Continuing after dependencies...');
 
 /**
  * Get port from environment and store in Express.
@@ -29,6 +31,7 @@ var server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+console.log('Server is listening...');
 
 /**
  * Normalize a port into a number, string, or false.
@@ -56,25 +59,26 @@ function normalizePort(val) {
 
 function onError(error) {
   if (error.syscall !== 'listen') {
-    throw error;
-  }
+    // Handle other types of errors here
+    console.error('Error:', error);
+  } else {
+    var bind = typeof port === 'string'
+      ? 'Pipe ' + port
+      : 'Port ' + port;
 
-  var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
-
-  // handle specific listen errors with friendly messages
-  switch (error.code) {
-    case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
-      process.exit(1);
-      break;
-    case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
-      process.exit(1);
-      break;
-    default:
-      throw error;
+    // Handle specific listen errors with friendly messages
+    switch (error.code) {
+      case 'EACCES':
+        console.error(bind + ' requires elevated privileges');
+        process.exit(1);
+        break;
+      case 'EADDRINUSE':
+        console.error(bind + ' is already in use');
+        process.exit(1);
+        break;
+      default:
+        throw error;
+    }
   }
 }
 
@@ -89,3 +93,15 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+// Add a global uncaught exception handler
+process.on('uncaughtException', function (err) {
+  console.error('Uncaught exception:', err);
+  // You may want to gracefully shut down the server or perform other cleanup here
+});
+
+// Add a global unhandled promise rejection handler
+process.on('unhandledRejection', function (reason, promise) {
+  console.error('Unhandled promise rejection at:', promise, 'reason:', reason);
+  // You may want to handle or log the rejection reason here
+});
