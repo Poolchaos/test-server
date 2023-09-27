@@ -38,10 +38,10 @@ load('createError', 'http-errors');
 load('path', 'path');
 load('cookieParser', 'cookie-parser');
 load('logger', 'morgan');
-load('cors', 'cors');
 load('mongoose', 'mongoose');
 load('passport', 'passport');
 load('express', 'express');
+load('cors', 'cors');
 
 console.log('App | Loading routes...');
 loadRoute('indexRouter', './routes/index');

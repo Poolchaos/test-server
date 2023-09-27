@@ -28,3 +28,6 @@ $ `docker rm zailab`
 
 ## Check config
 $ `docker inspect zailab`
+
+## Check errors
+$ `docker exec -it zai-test-server:18.14.0 /bin/sh`
