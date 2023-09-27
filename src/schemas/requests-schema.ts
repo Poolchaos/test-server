@@ -1,4 +1,4 @@
-var mongoose = require('mongoose');
+import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const RequestsSchema = new Schema({
@@ -30,4 +30,4 @@ const RequestsSchema = new Schema({
   }
 }, { collection: 'api-call-configs' });
 
-module.exports = RequestsSchema;
+export default RequestsSchema;

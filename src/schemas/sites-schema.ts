@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const SitesSchema = new Schema({
@@ -12,4 +12,4 @@ const SitesSchema = new Schema({
   }
 }, { collection: 'organisation-projector.displaySitesView' });
 
-module.exports = SitesSchema;
+export default SitesSchema;

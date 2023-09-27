@@ -1,9 +1,9 @@
-var express = require('express');
+import express from 'express';
 var router = express.Router();
-const AuthModel = require('../models/auth-model');
-var jwt = require('jsonwebtoken');
-let JSEncrypt = require('node-jsencrypt');
-var mongoose = require('mongoose');
+import AuthModel from '../models/auth-model';
+// import jwt from 'jsonwebtoken';
+import JSEncrypt from 'node-jsencrypt';
+import mongoose from 'mongoose';
 const ObjectId = mongoose.Types.ObjectId;
 
 const decrypt = function(data) {
@@ -25,8 +25,8 @@ router.post(
 
       AuthModel
         .find({ username })
-        .then(function (docs, err) {
-          if (err || !docs || docs.length == 0) return res.send(401, 'Username or password is incorrect. Please try again.');
+        .then((docs) => {
+          if (!docs || docs.length == 0) return res.send(401, 'Username or password is incorrect. Please try again.');
 
           let user = docs[0].toJSON();
           if (user && decrypt(password) === decrypt(user.password)) {
@@ -80,4 +80,4 @@ router.post(
   }
 );
 
-module.exports = router;
+export default router;

@@ -1,15 +1,16 @@
-var express = require('express');
+import express from 'express';
 var router = express.Router();
-const SitesModel = require('../models/sites-model');
+import OrganisationsModel from '../models/organisations-model';
 
 router.get('/', async (req, res) => {
+  const { environment } = req.query;
   try {
-    const data = await SitesModel.find({ organisationId: '4767c999-78fb-49cb-880e-4ff6e4f7e28c' });
+    const data = await OrganisationsModel.find({ environment });
     res.json(data);
   } catch (error) {
     console.error('An error occurred:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-  
-module.exports = router;
+
+export default router;

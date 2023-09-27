@@ -1,9 +1,9 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 //Define a schema
 var Schema = mongoose.Schema;
 
-const TestResultSchema = Schema({
+const TestResultSchema = new Schema({
   testId: {
     type: mongoose.Schema.Types.ObjectId,
     required: [true, 'Test ID is required'],
@@ -52,4 +52,4 @@ const TestResultSchema = Schema({
   ],
 }, { collection : 'test-results' });
 
-module.exports = TestResultSchema;
+export default TestResultSchema;

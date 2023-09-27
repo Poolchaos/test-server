@@ -1,13 +1,14 @@
-var express = require('express');
+import express from 'express';
 var router = express.Router();
-var mongoose = require('mongoose');
+import mongoose from 'mongoose';
+// @ts-ignore
 const ObjectId = mongoose.Types.ObjectId;
 
-const TestSuiteModel = require('../models/test-suite-model');
+import TestSuiteModel from '../models/test-suite-model';
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.sendStatus(200);
 });
 
 router.post('/testsuites', async (req, res) => {
@@ -107,4 +108,4 @@ router.get('/testsuites/:testSuiteId/test/:testId', async (req, res) => {
 });
 
 
-module.exports = router;
+export default router;
