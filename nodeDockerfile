@@ -1,4 +1,4 @@
-FROM    node:0.10
+FROM    node:18.14.0
 
 # Environmental variables
 ENV     USER=root HOME=/tmp
@@ -10,5 +10,5 @@ ADD     ./favicon.ico              /favicon.ico
 RUN     npm install git+https://zaijenkins:Zcutp123@bitbucket.org/zaralab/plugin-environment-js#feature/refactor && \
         npm install git+https://zaijenkins:Zcutp123@bitbucket.org/zaralab/web-server -g && \
 
-EXPOSE  8000
-CMD     ["web-server", "--hostname", "0.0.0.0", "--path", ".", "--application", "contact-centre"]
+EXPOSE  9000
+ENTRYPOINT ["node", "--inspect=0.0.0.0:9229", "."]
