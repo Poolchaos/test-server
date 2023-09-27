@@ -34,14 +34,14 @@ function loadRoute(route, dependency) {
   }
 }
 
+load('express', 'express');
+load('cors', 'cors');
 load('createError', 'http-errors');
 load('path', 'path');
 load('cookieParser', 'cookie-parser');
 load('logger', 'morgan');
 load('mongoose', 'mongoose');
 load('passport', 'passport');
-load('express', 'express');
-load('cors', 'cors');
 
 console.log('App | Loading routes...');
 loadRoute('indexRouter', './routes/index');

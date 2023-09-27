@@ -98,12 +98,12 @@ function onListening() {
 
 // Add a global uncaught exception handler
 process.on('uncaughtException', function (err) {
-  console.error('Uncaught exception:', err);
+  console.log('Error: Uncaught exception:', err);
   // You may want to gracefully shut down the server or perform other cleanup here
 });
 
 // Add a global unhandled promise rejection handler
 process.on('unhandledRejection', function (reason, promise) {
-  console.error('Unhandled promise rejection at:', promise, 'reason:', reason);
+  console.error('Error: Unhandled promise rejection at:', promise, 'reason:', reason);
   // You may want to handle or log the rejection reason here
 });
