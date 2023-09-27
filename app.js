@@ -1,17 +1,32 @@
 console.log('App | Loading...');
 
-console.log('App | Loading third party dependencies...');
+console.log('App | Loading third party dependencies');
+console.log('App | Loading third party dependencies | http-errors ');
 var createError = require('http-errors');
+console.log('App | Loading third party dependencies | http-errors loaded ');
+console.log('App | Loading third party dependencies | express ');
 var express = require('express');
+console.log('App | Loading third party dependencies | express loaded ');
+console.log('App | Loading third party dependencies | path ');
 var path = require('path');
+console.log('App | Loading third party dependencies | path loaded ');
+console.log('App | Loading third party dependencies | cookie-parser ');
 var cookieParser = require('cookie-parser');
+console.log('App | Loading third party dependencies | cookie-parser loaded ');
+console.log('App | Loading third party dependencies | morgan ');
 var logger = require('morgan');
+console.log('App | Loading third party dependencies | morgan loaded ');
+console.log('App | Loading third party dependencies | cors ');
 const cors = require('cors');
+console.log('App | Loading third party dependencies | cors loaded ');
+console.log('App | Loading third party dependencies | mongoose ');
 var mongoose = require('mongoose');
-
+console.log('App | Loading third party dependencies | mongoose loaded ');
+console.log('App | Loading third party dependencies | passport ');
 const passport = require('passport');
+console.log('App | Loading third party dependencies | passport loaded ');
 
-console.log('App | Loading dependencies...');
+console.log('App | Loading dependencies');
 var indexRouter = require('./routes/index');
 var authRouter = require('./routes/auth');
 var envRouter = require('./routes/environments');
