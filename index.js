@@ -7,7 +7,9 @@ console.log('Server is starting...');
 
 console.log('Getting dependencies...');
 var app = require('./app');
+console.log('Getting dependencies... 1 ');
 var debug = require('debug')('zai-test-service:server');
+console.log('Getting dependencies... 2 ');
 var http = require('http');
 console.log('Continuing after dependencies...');
 
