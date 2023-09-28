@@ -5,13 +5,12 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "webpack",
-    "start": "node ./bin/www",
+    "start": "nodemon --watch src ./index",
 
-    "dockerize": "npm run docker:cleanup ^& npm run docker:build ^& npm run docker:start",
-
+    "dockerize": "npm run kill ^& npm run docker:build ^& npm run docker:start",
     "docker:build": "docker build -t zai-test-server:18.14.0 .",
     "docker:start": "docker run --network=zai-test -d -p 8000:8000 --name zailab zai-test-server:18.14.0",
-    "docker:cleanup": "docker stop zailab & docker rm zailab",
+    "kill": "docker stop zailab & docker rm zailab",
     "prune": "docker container prune",
     "restart": "docker restart zai-test-server:18.14.0"
   },
@@ -40,6 +39,7 @@
     "webpack": "^5.88.2"
   },
   "devDependencies": {
+    "nodemon": "^3.0.1",
     "ts-loader": "^9.4.4",
     "tslint": "^6.1.3",
     "typescript": "^5.2.2",

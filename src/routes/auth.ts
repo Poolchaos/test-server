@@ -26,7 +26,9 @@ router.post(
       AuthModel
         .find({ username })
         .then((docs) => {
-          if (!docs || docs.length == 0) return res.send(401, 'Username or password is incorrect. Please try again.');
+          if (!docs || docs.length == 0) {
+            return res.status(401).send('Username or password is incorrect. Please try again.');
+          }
 
           let user = docs[0].toJSON();
           if (user && decrypt(password) === decrypt(user.password)) {
@@ -34,21 +36,19 @@ router.post(
             // log('User authenticated', email);
             return res.sendStatus(200);
           }
-          return res.send(401, 'Email or password is incorrect. Please try again.')
+          return res.status(401).send('Username or password is incorrect. Please try again.');
         })
         .catch(e => {
           console.info('Failed to read user login', req.body, e);
-          return res.sendStatus(500, {error: e})
+          return res.status(500).send({error: e});
         });
 
     } catch(e) {
       console.info('Failed to authenticate login', req.body, e);
-      return res.sendStatus(500, {error: e})
+      return res.status(500).send({error: e});
     }
   }
 );
-
-
 
 router.post(
   '/register',
@@ -75,7 +75,7 @@ router.post(
       }
     } catch(e) {
       console.info('Failed to complete registration', req.body, e);
-      res.sendStatus(500, {error: e});
+      res.status(500).send({error: e});
     }
   }
 );

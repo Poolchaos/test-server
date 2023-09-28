@@ -32,4 +32,13 @@ module.exports = {
       },
     ],
   },
+  performance: { hints: false },
+  devServer: {
+    // serve index.html for all 404 (required for push-state)
+    historyApiFallback: true,
+    open: false,
+    hot: true,
+    port: 8000,
+    host: 'localhost'
+  },
 }
