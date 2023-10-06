@@ -44,9 +44,12 @@ log('App | Loading third party dependency | compression loaded ');
 
 log('App | Loading routes...');
 
-log('App | Loading resource | indexRouter ');
-import indexRouter from './routes/index';
-log('App | Loading resource | indexRouter loaded ');
+log('App | Loading resource | testSuitesRouter ');
+import testSuitesRouter from './routes/test-suites';
+log('App | Loading resource | testSuitesRouter loaded ');
+log('App | Loading resource | subTestRouter ');
+import subTestRouter from './routes/sub-tests';
+log('App | Loading resource | subTestRouter loaded ');
 log('App | Loading resource | authRouter ');
 import authRouter from './routes/auth';
 log('App | Loading resource | authRouter loaded ');
@@ -57,14 +60,14 @@ log('App | Loading resource | orgRouter ');
 import orgRouter from './routes/organisations';
 log('App | Loading resource | orgRouter loaded ');
 log('App | Loading resource | runTestRouter ');
-import runTestRouter from './routes/run-test';
+import runTestRouter from './routes/run-test/run-test';
 log('App | Loading resource | runTestRouter loaded ');
 log('App | Loading resource | requestsRouter ');
 import requestsRouter from './routes/requests';
 log('App | Loading resource | requestsRouter loaded ');
-log('App | Loading resource | sitesRouter ');
-import sitesRouter from './routes/sites';
-log('App | Loading resource | sitesRouter loaded ');
+log('App | Loading resource | resultsRouter ');
+import resultsRouter from './routes/test-results';
+log('App | Loading resource | resultsRouter loaded ');
 
 log('App | Dependencies... Loaded');
 
@@ -75,19 +78,19 @@ app.use(cors());
 app.use(compression());
 
 
-// const uri = "mongodb://127.0.0.1:27017/e2e-testing-projector"; // local db
-// const uri = "mongodb://192.168.1.6:27017/e2e-testing-projector"; // local db from docker container
-const uri = "mongodb://projectionrw:ABWturARBF98MPlcQ4Y=@192.168.3.36:27017/admin"; // dev db
+const environment = process.env.NODE_ENV;
+const localMongo = "mongodb://127.0.0.1:27017/e2e-testing-projector"; // local db
+const devMongo = "mongodb://projectionrw:ABWturARBF98MPlcQ4Y=@192.168.3.36:27017/admin"; // dev db (is prod for this app)
 
 log('Connecting to mongo ...');
 mongoose.connect(
-  uri, {
+  environment === 'development' ? localMongo : devMongo, {
     // @ts-ignore
     useNewUrlParser: true,
     useUnifiedTopology: true
   }
 ).then(() => {
-  log('Connected to MongoDB');
+  log(`Connected to ${environment === 'development' ? 'local' : 'development'} MongoDB`);
 })
 .catch((error) => {
   console.error('Error connecting to MongoDB:', error);
@@ -106,15 +109,15 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/', indexRouter);
 app.use('/auth', authRouter);
 app.use('/environments', envRouter);
 app.use('/organisations', orgRouter);
-app.use('/automate', runTestRouter);
-app.use('/requests', requestsRouter);
+app.use('/api-requests', requestsRouter);
 
-// Used for testing
-app.use('/sites', sitesRouter);
+app.use('/test-suites', testSuitesRouter);
+app.use('/sub-tests', subTestRouter);
+app.use('/automate', runTestRouter);
+app.use('/results', resultsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
