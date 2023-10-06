@@ -1,3 +1,0 @@
-- op: replace
-  path: /spec/rules/0/host
-  value: zai-test-service.eks.api.prod.euw1.aws.zailab.com
