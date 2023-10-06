@@ -9,6 +9,7 @@ var OrganisationsSchema = new Schema({
     required: [true, 'No identifier specified']
   },
   name: String,
+  environment: String,
   users: [Schema.Types.Mixed]
 }, { collection : 'organisations' });
 

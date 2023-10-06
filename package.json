@@ -4,7 +4,8 @@
   "private": true,
   "main": "dist/index.js",
   "scripts": {
-    "build": "webpack",
+    "build": "webpack --env=development",
+    "build-dev": "webpack --env=production",
     "start": "nodemon --watch src ./index",
 
     "dockerize": "npm run kill ^& npm run docker:build ^& npm run docker:start",
