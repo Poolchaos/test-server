@@ -7,13 +7,14 @@ import { TestResultModel } from './test-result-model';
 import { TestGenerator } from './test-generator';
 
 router.post('/', async (req, res) => {
-  const { testId, testSuiteId, name, browser, permissions, steps } = req.body;
+  const { testId, testSuiteId, environment, name, browser, permissions, steps } = req.body;
   try {
     // Save initial test data
     let testResultModel = await new TestResultModel(testId);
 
     // Start generating tests
     let testGenerator = new TestGenerator(
+      environment,
       testId,
       testResultModel.startTime,
       name,
@@ -29,12 +30,12 @@ router.post('/', async (req, res) => {
           testResultModel.startTime
         );
 
-        // testRunnerModel
-        //   .run()
-        //   .then(() => {
-        //     // test run successfully
-        //     res.status(200).json(testResultModel.testResult)
-        //   });
+        testRunnerModel
+          .run()
+          .then(() => {
+            // test run successfully
+            res.status(200).json(testResultModel.testResult)
+          });
 
         res.status(200)
       }

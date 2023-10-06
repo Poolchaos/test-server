@@ -131,7 +131,7 @@ export class TestRunnerModel {
       hoteljsonFile.startTime = this.startTime;
       hoteljsonFile.generatedTest = testFile;
 
-      await this.getScreenshots();
+      // await this.getScreenshots();
 
       if (!hoteljsonFile.fixtures) {
         hoteljsonFile.fixtures = [{

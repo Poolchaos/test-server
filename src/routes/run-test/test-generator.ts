@@ -1,4 +1,5 @@
-import { promises as fs } from 'fs';
+import fs, { promises } from 'fs';
+import path from 'path';
 import util from 'util';
 
 const writeFile = util.promisify(fs.writeFile);
@@ -6,6 +7,7 @@ const writeFile = util.promisify(fs.writeFile);
 export class TestGenerator {
 
   constructor(
+    private environment,
     private testId,
     private startTime: number,
     private name: string,
@@ -16,23 +18,28 @@ export class TestGenerator {
   public generate(): void {
     // GENERATE TEST
     try {
-      let url;
-      if (this.steps[0].groupName) {
-        url = this.steps[0].url;
-      }
-
       let fileContent = '';
       fileContent += `import { Selector } from 'testcafe';\n\n`;
-      fileContent += `fixture('Single Agent').page('${url}');\n\n`;
+      fileContent += `fixture('${this.name}').page('${this.environment.url}');\n\n`;
       fileContent += `test('${this.name}', async (t) => {\n`;
 
-      fileContent += `\tconst appSelector = Selector('input[placeholder='Email']');\n`;
+      fileContent += `\tconst appSelector = Selector('input[placeholder="Email"]');\n`;
       fileContent += `\tawait appSelector.with({ visibilityCheck: true })();\n`;
 
       const addStep = (step, index) => {
         if (step.type === 'text') {
-          
+          if (step.predefined) {
+            fileContent += `\tawait t.typeText('input[placeholder="${step.config.label}"]', "${step.config.value}");\n`;
+          }
         }
+
+        if (step.type === 'click') {
+          if (step.config.value) {
+            fileContent += `\tconst button = Selector('button').withText('${step.config.value}');\n`;
+            fileContent += `\tawait t.click(button);\n`;
+          }
+        }
+
 
 
 
@@ -94,8 +101,16 @@ export class TestGenerator {
   
       fileContent += `})`;
   
-  
-      const filePath = `tests/${this.name}-test.js`;
+      const currentDirectory = process.cwd();
+
+      // Define the file path relative to the current directory
+      const fileName = `${this.name}-test.js`;
+      const testPath = path.join(currentDirectory, 'tests');
+      const filePath = path.join(testPath, fileName);
+
+      if (!fs.existsSync(testPath)) {
+        fs.mkdirSync(testPath);
+      }
   
       console.info('Attempt writing ');
       // @ts-ignore
