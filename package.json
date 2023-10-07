@@ -13,7 +13,7 @@
     "docker:start": "docker run --network=zai-test -d -p 8000:8000 --name zailab zai-test-server:18.14.0",
     "kill": "docker stop zailab & docker rm zailab",
     "prune": "docker container prune",
-    "restart": "docker restart zai-test-server:18.14.0"
+    "restart": "docker restart zailab"
   },
   "dependencies": {
     "child_process": "^1.0.2",
