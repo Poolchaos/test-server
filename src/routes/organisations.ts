@@ -61,16 +61,20 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Delete test
+// Delete organsiation
 router.delete('/:organisationId', async (req, res) => {
   try {
     const organisationId = req.params.organisationId;
     
     const organisation = await OrganisationsModel.findOneAndRemove({ _id: new ObjectId(organisationId) });
     console.log(' ::>> organisation ', organisation);
+
     if (!organisation) {
       return res.status(404).json({ error: `Organisation with ID ${organisationId} was not found` });
     }
+
+    await UserModel.deleteMany({ organisationId: new ObjectId(organisationId) });
+
     res.json({ status: 'deleted', organisationId });
   } catch (error) {
     console.error('An error occurred:', error);
