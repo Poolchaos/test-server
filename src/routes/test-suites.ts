@@ -6,6 +6,7 @@ const ObjectId = mongoose.Types.ObjectId;
 
 import TestSuiteModel from '../models/test-suite-model';
 import TestModel from '../models/test-model';
+import TestResultsModel from '../models/test-results-model';
 
 router.post('/', async (req, res) => {
   try {
@@ -124,6 +125,9 @@ router.delete('/:testSuiteId/test/:testId', async (req, res) => {
     if (!test) {
       return res.status(404).json({ error: `Test with ID ${testId} was not found in the Test Suite with ID ${testSuiteId}` });
     }
+
+    await TestResultsModel.findOneAndRemove({ testId: new ObjectId(testId) });
+
     res.json({ testSuiteId: req.params.testSuiteId, ...test });
   } catch (error) {
     console.error('An error occurred:', error);
