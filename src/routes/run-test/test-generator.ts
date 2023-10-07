@@ -35,8 +35,17 @@ export class TestGenerator {
 
         if (step.type === 'click') {
           if (step.config.value) {
-            fileContent += `\tconst button = Selector('button').withText('${step.config.value}');\n`;
-            fileContent += `\tawait t.click(button);\n`;
+            fileContent += `\tconst buttonSelector = Selector('button').withText('${step.config.value}');\n`;
+            fileContent += `\tawait t.click(buttonSelector);\n`;
+          }
+        }
+
+        if (step.type === 'expect') {
+          if (step.config.value) {
+            if (step.config.value === 'dashboard') {
+              fileContent += `\tconst hudBarSelector = Selector('.o-hud-statusbar__level.o-hud-statusbar__level--two-front.is-border-and-pattern');\n`;
+              fileContent += `\tawait hudBarSelector.with({ visibilityCheck: true })();\n`;
+            }
           }
         }
 

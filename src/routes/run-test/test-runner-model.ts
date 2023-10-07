@@ -2,6 +2,7 @@ import path from 'path';
 import { promises as fs } from 'fs';
 
 import TestResultsModel from '../../models/test-results-model';
+import { log } from '../../tools/logger';
 
 export class TestRunnerModel {
 
@@ -28,7 +29,11 @@ export class TestRunnerModel {
         await this.startTestCafe();
 
         console.log(' ::>> tests are done ');
+        // await new Promise(resolve => setTimeout(resolve, 10000));
+ 
+        log('Test Runner Model | Loading third party dependency | cookie-parser loaded ');
         const hoteljsonFile = await this.getTestReport();
+        console.log(' ::>> hoteljsonFile    hoteljsonFile   >>>> ', hoteljsonFile);
 
         TestResultsModel
           .findOneAndUpdate({
@@ -55,7 +60,6 @@ export class TestRunnerModel {
               return;
             }
             resolve();
-            console.log('Updated test result:', updatedTestResult);
           })
           .catch((error) => {
             console.error('Error updating test result:', error);
@@ -111,7 +115,7 @@ export class TestRunnerModel {
       const testcafe = await createTestCafe(options);
       await testcafe
       .createRunner()
-      .reporter('json', './reports/report.json')
+      .reporter('json', './static/reports/report.json')
       .src('./tests/' + this.name + '-test.js')
       .browsers('Chrome')
       .run(config);
@@ -124,12 +128,13 @@ export class TestRunnerModel {
 
   private async getTestReport(): Promise<any> {
     try {
-      var hoteljsonFile = require('./reports/report.json');
+      var hoteljsonFile = require('../../../static/reports/report.json');
+      console.log(' ::>> hoteljsonFile >>>>> ', hoteljsonFile);
 
       const filePath = path.join(__dirname, '../tests/', this.name + '-test.js');
-      const testFile = await fs.readFile(filePath, 'utf-8');
+      // const testFile = await fs.readFile(filePath, 'utf-8');
       hoteljsonFile.startTime = this.startTime;
-      hoteljsonFile.generatedTest = testFile;
+      // hoteljsonFile.generatedTest = testFile;
 
       // await this.getScreenshots();
 

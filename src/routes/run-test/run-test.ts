@@ -34,55 +34,17 @@ router.post('/', async (req, res) => {
           .run()
           .then(() => {
             // test run successfully
-            res.status(200).json(testResultModel.testResult)
+            // res.status(200).json(testResultModel.testResult)
           });
-
-        res.status(200)
       }
     );
     testGenerator.generate();
+    res.status(200).send();
   } catch(e) {
     console.info(' ::>> error > 1', e);
     res.status(500).json({ e });
   }
 });
 
-  
-  
-router.post('/all', async (req, res) => {
-  const { scriptName } = req.body;
-  try {
-    const createTestCafe = require('testcafe');
-
-    const options = {
-        hostname: 'localhost',
-        port1:    1337,
-        port2:    1338,
-    };
-
-    const testcafe = await createTestCafe(options);
-
-    await testcafe
-      .createRunner()
-      .reporter('json', './report.json')
-      .src('./tests/**/*')
-      .browsers('chrome')
-      .run({
-        "screenshots": {
-          "path": "./screenshots/",
-          "takeOnFails": true
-        },
-        disableNativeAutomation: true
-      });
-
-    await testcafe.close();
-
-    console.log(' ::>> tests are done ');
-    var hoteljsonFile = require("./reports/report.json");
-    res.json(hoteljsonFile);
-  } catch(e) {
-    console.info(' ::>> error > ', e);
-  }
-});
 
 export default router;

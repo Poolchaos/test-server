@@ -26,7 +26,6 @@ export class TestResultModel {
     } else {
       this.updateInstance();
     }
-
     await this.testResult.save();
   }
 
@@ -62,8 +61,6 @@ export class TestResultModel {
           console.log('Test result not found.');
           return;
         }
-    
-        console.log('Updated test result:', updatedTestResult);
       })
       .catch((error) => {
         console.error('Error updating test result:', error);

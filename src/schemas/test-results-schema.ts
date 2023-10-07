@@ -44,10 +44,7 @@ const TestResultSchema = new Schema({
         {
           type: mongoose.Schema.Types.Mixed,
         },
-      ],
-      generatedTest: {
-        type: mongoose.Schema.Types.Mixed,
-      },
+      ]
     },
   ],
 }, { collection : 'test-results' });
