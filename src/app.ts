@@ -59,6 +59,9 @@ log('App | Loading resource | envRouter loaded ');
 log('App | Loading resource | orgRouter ');
 import orgRouter from './routes/organisations';
 log('App | Loading resource | orgRouter loaded ');
+log('App | Loading resource | userRouter ');
+import userRouter from './routes/users';
+log('App | Loading resource | userRouter loaded ');
 log('App | Loading resource | runTestRouter ');
 import runTestRouter from './routes/run-test/run-test';
 log('App | Loading resource | runTestRouter loaded ');
@@ -112,6 +115,7 @@ app.use((req, res, next) => {
 app.use('/auth', authRouter);
 app.use('/environments', envRouter);
 app.use('/organisations', orgRouter);
+app.use('/users', userRouter);
 app.use('/api-requests', requestsRouter);
 
 app.use('/test-suites', testSuitesRouter);
