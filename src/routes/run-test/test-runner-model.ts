@@ -67,10 +67,12 @@ export class TestRunnerModel {
           })
           .catch((error) => {
             console.error('Error updating test result:', error);
+            this.emptyReportFile();
           });
 
       } catch(e) {
-        console.info(' ::>> error > 2', e);
+        console.info('Error:', e);
+        this.emptyReportFile();
       }
     });
   }
@@ -115,7 +117,8 @@ export class TestRunnerModel {
           path: "./screenshots/",
           takeOnFails: true
         },
-        pageLoadTimeout: 60000
+        browserInitTimeout: 600000,
+        pageLoadTimeout: 600000
       };
       
       const testcafe = await createTestCafe(options);
@@ -133,6 +136,30 @@ export class TestRunnerModel {
 
       } catch(e) {
         log('Error: Encountered an issue while running testCafe test');
+
+        TestResultsModel
+          .findOneAndUpdate({
+            testId: this.testId,
+            'results.testRunId': this.testRunId,
+          }, {
+            $set: {
+              'results.$[elem]': {
+                ongoing: false,
+                error: e
+              },
+            },
+          }, {
+            arrayFilters: [
+              {
+                'elem.testRunId': this.testRunId,
+              },
+            ],
+            new: true,
+          })
+          .then(() => {
+            throw e;
+          });
+
       }
       await testcafe.close();
 
@@ -152,7 +179,13 @@ export class TestRunnerModel {
     // Add a loop that retries until the condition is met or the maximum attempts are reached
     while (Object.keys(testReportJsonFileContent).length === 0 && attempts < maxAttempts) {
       try {
-        testReportJsonFileContent = JSON.parse(await fs.readFile('./static/reports/report.json', 'utf8'));
+        let fileContent = await fs.readFile('./static/reports/report.json', 'utf8');
+
+        if (!fileContent) {
+          throw new Error('Error generating file content. Check for previous errors. ');
+        }
+
+        testReportJsonFileContent = JSON.parse(fileContent);
         console.log(' ::>> testReportJsonFileContent >>>>> ', testReportJsonFileContent);
         
         // Exit the loop if the condition is met
@@ -172,6 +205,20 @@ export class TestRunnerModel {
     
     return testReportJsonFileContent;
   };
+  
+  public async emptyReportFile() {
+    const filePath = path.join(__dirname, 'static/reports/report.json');
+  
+    try {
+      const emptyObject = {};
+      const jsonString = JSON.stringify(emptyObject, null, 2);
+  
+      await fs.writeFile(filePath, jsonString, 'utf8');
+      console.log('File has been overwritten with an empty object.');
+    } catch (error) {
+      console.error('Error writing file:', error);
+    }
+  }
 
   private async getTestReport(): Promise<any> {
     try {
@@ -181,6 +228,10 @@ export class TestRunnerModel {
       // var testReportJsonFileContent = require('../../../static/reports/report.json');
       var testReportJsonFileContent = await this.getTestReportFileContent();
       console.log(' ::>> testReportJsonFileContent >>>>> ', testReportJsonFileContent);
+
+      if (testReportJsonFileContent) {
+        this.emptyReportFile();
+      }
 
       // const filePath = path.join(__dirname, '../tests/', this.name + '-test.js');
       // const testFile = await fs.readFile(filePath, 'utf-8');
@@ -206,6 +257,7 @@ export class TestRunnerModel {
       return testReportJsonFileContent;
     } catch(e) {
       console.log(e);
+      this.emptyReportFile();
     }
   }
 }
