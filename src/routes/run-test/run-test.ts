@@ -5,6 +5,7 @@ import { TestRunnerModel } from "./test-runner-model";
 import { TestResultModel } from './test-result-model';
 
 import { TestGenerator } from './test-generator';
+import { log } from '../../tools/logger';
 
 router.post('/', async (req, res) => {
   const { testId, testSuiteId, environment, name, browser, permissions, steps } = req.body;
@@ -20,8 +21,9 @@ router.post('/', async (req, res) => {
       name,
       steps,
       async () => {
-        // test generated successfully
-        // Initiate test runner
+        // Success callback
+        // - Test generated successfully
+        // - Initiate test runner
         let testRunnerModel = await new TestRunnerModel(
           testResultModel.testRunId,
           testId,
@@ -29,13 +31,18 @@ router.post('/', async (req, res) => {
           steps,
           testResultModel.startTime
         );
+        log('Start running test...');
 
         testRunnerModel
           .run()
           .then(() => {
             // test run successfully
-            // res.status(200).json(testResultModel.testResult)
+            log('Test run complete');
           });
+      },
+      () => {
+        // Fail callback
+        testResultModel.markAsFailed();
       }
     );
     testGenerator.generate();

@@ -30,12 +30,14 @@ export class TestRunnerModel {
 
         await this.startTestCafe();
 
-        console.log(' ::>> tests are done ');
-        // await new Promise(resolve => setTimeout(resolve, 10000));
+        log('Test run complete');
+        log('Loading test report...');
  
-        log('Test Runner Model | Loading third party dependency | cookie-parser loaded ');
-        const hoteljsonFile = await this.getTestReport();
-        console.log(' ::>> hoteljsonFile    hoteljsonFile   >>>> ', hoteljsonFile);
+        const testReportJsonFileContent = await this.getTestReport();
+
+        log('Test report loaded', testReportJsonFileContent);
+
+        console.log(' ::>> update test result model 1 ');
 
         TestResultsModel
           .findOneAndUpdate({
@@ -44,7 +46,7 @@ export class TestRunnerModel {
           }, {
             $set: {
               'results.$[elem]': {
-                ...hoteljsonFile,
+                ...testReportJsonFileContent,
                 ongoing: false
               },
             },
@@ -58,7 +60,7 @@ export class TestRunnerModel {
           })
           .then((updatedTestResult) => {
             if (!updatedTestResult) {
-              console.log('Test result not found.');
+              log('Test result not found');
               return;
             }
             resolve();
@@ -97,6 +99,7 @@ export class TestRunnerModel {
   }
 
   private async startTestCafe(): Promise<void> {
+    log('Starting Test Cafe...')
     try {
       const createTestCafe = require('testcafe');
 
@@ -120,13 +123,20 @@ export class TestRunnerModel {
 
       runner.browsers(environment === 'development' ? 'chrome' : 'chromium:headless');
 
-      await runner
-        .reporter('json', './static/reports/report.json')
-        .src('./tests/' + this.name + '-test.js')
-        .run(config);
+      try {
+        await runner
+          .reporter('json', './static/reports/report.json')
+          .src('./tests/' + this.name + '-test.js')
+          .run(config);
+          
+        log('Test Cafe Finished, closing connection');
 
+      } catch(e) {
+        log('Error: Encountered an issue while running testCafe test');
+      }
       await testcafe.close();
 
+      log('Test Cafe conenction closed');
 
     } catch(e) {
       console.log(e);
@@ -166,33 +176,34 @@ export class TestRunnerModel {
   private async getTestReport(): Promise<any> {
     try {
       const currentDirectory = __dirname;
-      log('Get test report for '+ environment + ' in the directory: ' + currentDirectory)
-      // var hoteljsonFile = require('../../../static/reports/report.json');
-      var hoteljsonFile = await this.getTestReportFileContent();
-      console.log(' ::>> hoteljsonFile >>>>> ', hoteljsonFile);
+      log(`Loading test report on environment ${environment === 'development' ? 'local' : 'dev1'} from directory: ${currentDirectory}`);
+
+      // var testReportJsonFileContent = require('../../../static/reports/report.json');
+      var testReportJsonFileContent = await this.getTestReportFileContent();
+      console.log(' ::>> testReportJsonFileContent >>>>> ', testReportJsonFileContent);
 
       // const filePath = path.join(__dirname, '../tests/', this.name + '-test.js');
       // const testFile = await fs.readFile(filePath, 'utf-8');
-      hoteljsonFile.startTime = this.startTime;
-      // hoteljsonFile.generatedTest = testFile;
+      testReportJsonFileContent.startTime = this.startTime;
+      // testReportJsonFileContent.generatedTest = testFile;
 
       // await this.getScreenshots();
 
-      if (!hoteljsonFile.fixtures) {
-        hoteljsonFile.fixtures = [{
+      if (!testReportJsonFileContent.fixtures) {
+        testReportJsonFileContent.fixtures = [{
           tests: [{
             steps: this.steps
           }]
         }];
-      } else if (!hoteljsonFile.fixtures[0].tests) {
-        hoteljsonFile.fixtures[0].tests = [{
+      } else if (!testReportJsonFileContent.fixtures[0].tests) {
+        testReportJsonFileContent.fixtures[0].tests = [{
           steps: this.steps
         }]
       } else {
-        hoteljsonFile.fixtures[0].tests[0].steps = this.steps;
+        testReportJsonFileContent.fixtures[0].tests[0].steps = this.steps;
       }
 
-      return hoteljsonFile;
+      return testReportJsonFileContent;
     } catch(e) {
       console.log(e);
     }

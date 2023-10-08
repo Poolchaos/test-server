@@ -2,6 +2,8 @@ import fs, { promises } from 'fs';
 import path from 'path';
 import util from 'util';
 
+import { log } from '../../tools/logger';
+
 const writeFile = util.promisify(fs.writeFile);
 
 export class TestGenerator {
@@ -12,10 +14,11 @@ export class TestGenerator {
     private startTime: number,
     private name: string,
     private steps: any,
-    private testFileDoneCallback: Function
+    private testFileDoneCallback: Function,
+    private testFileFailedCallback: Function
   ) {}
   
-  public generate(): void {
+  public async generate(): Promise<void> {
     // GENERATE TEST
     try {
       let fileContent = '';
@@ -121,14 +124,16 @@ export class TestGenerator {
         fs.mkdirSync(testPath);
       }
   
-      console.info('Attempt writing ');
+      log('Test suite generated. Writing to file...');
       // @ts-ignore
-      writeFile(filePath, fileContent);
-  
-      setTimeout(() => {
-        console.log('File written successfully:', filePath);
-        this.testFileDoneCallback()
-      }, 1000);
+      try {
+        await writeFile(filePath, fileContent);
+        log('File has been written:', filePath);
+        this.testFileDoneCallback();
+      } catch (error) {
+        console.error('Error writing file:', error);
+        this.testFileFailedCallback();
+      }
     } catch(e) {
       console.info(' ::>> failed to write test file', e);
       // res.status(500).json({ error: e });

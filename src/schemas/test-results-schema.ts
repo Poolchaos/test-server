@@ -11,7 +11,7 @@ const TestResultSchema = new Schema({
   results: [
     {
       testRunId: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId
       },
       url: {
         type: String

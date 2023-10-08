@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
-import TestResultsModel from '../../models/test-results-model';
 const ObjectId = mongoose.Types.ObjectId;
 
+import TestResultsModel from '../../models/test-results-model';
+import { log } from '../../tools/logger';
 
 export class TestResultModel {
 
@@ -51,6 +52,8 @@ export class TestResultModel {
       },
     };
     
+    console.log(' ::>> update test result model 3 ');
+    
     TestResultsModel.findOneAndUpdate(
       { testId: this.testId },
       updateObject,
@@ -59,6 +62,34 @@ export class TestResultModel {
       .then((updatedTestResult) => {
         if (!updatedTestResult) {
           console.log('Test result not found.');
+          return;
+        }
+      })
+      .catch((error) => {
+        console.error('Error updating test result:', error);
+      });
+  }
+
+  public markAsFailed(): void {
+    const updateObject = {
+      $push: {
+        results: {
+          ongoing: false,
+          testPassed: false
+        },
+      },
+    };
+
+    console.log(' ::>> update test result model 2 ');
+    
+    TestResultsModel.findOneAndUpdate(
+      { testId: this.testId },
+      updateObject,
+      { new: true }
+    )
+      .then((updatedTestResult) => {
+        if (!updatedTestResult) {
+          log('Error: Test result not found.');
           return;
         }
       })
