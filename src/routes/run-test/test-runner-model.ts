@@ -4,6 +4,8 @@ import { promises as fs } from 'fs';
 import TestResultsModel from '../../models/test-results-model';
 import { log } from '../../tools/logger';
 
+const environment = process.env.NODE_ENV;
+
 export class TestRunnerModel {
 
   private static = {
@@ -115,7 +117,7 @@ export class TestRunnerModel {
       const testcafe = await createTestCafe(options);
       const runner = testcafe.createRunner();
 
-      runner.browsers('chromium:headless');
+      runner.browsers(environment === 'development' ? 'chrome' : 'chromium:headless');
 
       await runner
         .reporter('json', './static/reports/report.json')
@@ -132,6 +134,8 @@ export class TestRunnerModel {
 
   private async getTestReport(): Promise<any> {
     try {
+      const currentDirectory = __dirname;
+      log('Get test report for '+ environment + ' in the directory: ' + currentDirectory)
       var hoteljsonFile = require('../../../static/reports/report.json');
       console.log(' ::>> hoteljsonFile >>>>> ', hoteljsonFile);
 
