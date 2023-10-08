@@ -117,8 +117,8 @@ export class TestRunnerModel {
           path: "./screenshots/",
           takeOnFails: true
         },
-        browserInitTimeout: 600000,
-        pageLoadTimeout: 600000
+        // browserInitTimeout: 1000,
+        // pageLoadTimeout: 600000
       };
       
       const testcafe = await createTestCafe(options);
