@@ -31,3 +31,17 @@ $ `docker inspect zailab`
 
 ## Check errors
 $ `docker exec -it zai-test-server:18.14.0 /bin/sh`
+
+
+
+
+Check container contents:
+- docker exec -it <container-id> /bin/bash
+
+- which google-chrome
+- which chromium
+- find / -type f -name 'chromium*' 2>/dev/null
+
+
+To exit container:
+- exit

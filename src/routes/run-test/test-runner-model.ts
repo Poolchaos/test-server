@@ -99,11 +99,11 @@ export class TestRunnerModel {
       const createTestCafe = require('testcafe');
 
       const options = {
-          hostname: 'localhost',
-          port1:    1337,
-          port2:    1338,
+        hostname: 'localhost',
+        port1:    1337,
+        port2:    1338,
       };
-
+      
       const config = {
         disableNativeAutomation: true,
         screenshots: {
@@ -111,16 +111,20 @@ export class TestRunnerModel {
           takeOnFails: true
         }
       };
-
+      
       const testcafe = await createTestCafe(options);
-      await testcafe
-      .createRunner()
-      .reporter('json', './static/reports/report.json')
-      .src('./tests/' + this.name + '-test.js')
-      .browsers('Chrome')
-      .run(config);
+      const runner = testcafe.createRunner();
+
+      runner.browsers('chromium:headless');
+
+      await runner
+        .reporter('json', './static/reports/report.json')
+        .src('./tests/' + this.name + '-test.js')
+        .run(config);
 
       await testcafe.close();
+
+
     } catch(e) {
       console.log(e);
     }
