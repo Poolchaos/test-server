@@ -18,7 +18,6 @@ router.get('/', async (req, res) => {
         new Promise(resolve => {
           UserModel.find({ organisationId: new ObjectId(org._id) })
           .then(users => {
-            console.log(' ::>> users = ', users);
             org.users = users;
             resolve(org);
           })
@@ -33,7 +32,6 @@ router.get('/', async (req, res) => {
     Promise
       .all(promises)
       .then(data => {
-        console.log(' ::>> data >>>>> ', data);
         res.json(data);
       });
   } catch (error) {

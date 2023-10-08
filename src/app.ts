@@ -1,6 +1,7 @@
 import { log } from './tools/logger';
+const environment = process.env.NODE_ENV;
 
-log('App | Loading...');
+log(`App | Loading on ${environment === 'development' ? 'local' : 'dev1'}...`);
 
 log('App | Loading third party dependencies...');
 
@@ -35,6 +36,9 @@ log('App | Loading third party dependency | compression loaded ');
 
 log('App | Loading routes...');
 
+log('App | Loading resource | keepAliveRouter ');
+import keepAliveRouter from './routes/keep-alive';
+log('App | Loading resource | keepAliveRouter loaded ');
 log('App | Loading resource | testSuitesRouter ');
 import testSuitesRouter from './routes/test-suites';
 log('App | Loading resource | testSuitesRouter loaded ');
@@ -71,12 +75,10 @@ app.use(passport.initialize());
 app.use(cors());
 app.use(compression());
 
-
-const environment = process.env.NODE_ENV;
 const localMongo = "mongodb://127.0.0.1:27017/e2e-testing-projector"; // local db
 const devMongo = "mongodb://projectionrw:ABWturARBF98MPlcQ4Y=@192.168.3.36:27017/admin"; // dev db (is prod for this app)
 
-log('Connecting to mongo ...');
+log(`Connecting to ${environment === 'development' ? 'local' : 'dev1'} mongo ...`);
 mongoose.connect(
   environment === 'development' ? localMongo : devMongo, {
     // @ts-ignore
@@ -84,7 +86,7 @@ mongoose.connect(
     useUnifiedTopology: true
   }
 ).then(() => {
-  log(`Connected to ${environment === 'development' ? 'local' : 'development'} MongoDB`);
+  log(`Connected to ${environment === 'development' ? 'local' : 'dev1'} MongoDB`);
 })
 .catch((error) => {
   console.error('Error connecting to MongoDB:', error);
@@ -102,6 +104,8 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
   next();
 });
+
+app.use('/', keepAliveRouter);
 
 app.use('/auth', authRouter);
 app.use('/environments', envRouter);
