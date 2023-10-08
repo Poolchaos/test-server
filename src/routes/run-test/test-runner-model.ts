@@ -112,7 +112,7 @@ export class TestRunnerModel {
           path: "./screenshots/",
           takeOnFails: true
         },
-        browserInitTimeout: 360000
+        pageLoadTimeout: 60000
       };
       
       const testcafe = await createTestCafe(options);
@@ -133,14 +133,45 @@ export class TestRunnerModel {
     }
   }
 
+  private async getTestReportFileContent(): Promise<any> {
+    let testReportJsonFileContent = {}; // Initialize with an empty object
+    let attempts = 0;
+    const maxAttempts = 20; // Maximum number of retry attempts
+    const retryInterval = 1000; // Delay between retry attempts in milliseconds (1 second)
+  
+    // Add a loop that retries until the condition is met or the maximum attempts are reached
+    while (Object.keys(testReportJsonFileContent).length === 0 && attempts < maxAttempts) {
+      try {
+        testReportJsonFileContent = JSON.parse(await fs.readFile('./static/reports/report.json', 'utf8'));
+        console.log(' ::>> testReportJsonFileContent >>>>> ', testReportJsonFileContent);
+        
+        // Exit the loop if the condition is met
+        if (Object.keys(testReportJsonFileContent).length !== 0) {
+          break;
+        }
+        
+        // Increment the attempts counter
+        attempts++;
+        
+        // Wait for the specified retry interval before the next attempt
+        await new Promise(resolve => setTimeout(resolve, retryInterval));
+      } catch (error) {
+        console.error('Error reading test report JSON file:', error);
+      }
+    }
+    
+    return testReportJsonFileContent;
+  };
+
   private async getTestReport(): Promise<any> {
     try {
       const currentDirectory = __dirname;
       log('Get test report for '+ environment + ' in the directory: ' + currentDirectory)
-      var hoteljsonFile = require('../../../static/reports/report.json');
+      // var hoteljsonFile = require('../../../static/reports/report.json');
+      var hoteljsonFile = await this.getTestReportFileContent();
       console.log(' ::>> hoteljsonFile >>>>> ', hoteljsonFile);
 
-      const filePath = path.join(__dirname, '../tests/', this.name + '-test.js');
+      // const filePath = path.join(__dirname, '../tests/', this.name + '-test.js');
       // const testFile = await fs.readFile(filePath, 'utf-8');
       hoteljsonFile.startTime = this.startTime;
       // hoteljsonFile.generatedTest = testFile;
