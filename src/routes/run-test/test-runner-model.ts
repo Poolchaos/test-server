@@ -111,7 +111,8 @@ export class TestRunnerModel {
         screenshots: {
           path: "./screenshots/",
           takeOnFails: true
-        }
+        },
+        browserInitTimeout: 360000
       };
       
       const testcafe = await createTestCafe(options);

@@ -20,9 +20,8 @@ export class TestGenerator {
     try {
       let fileContent = '';
       fileContent += `import { Selector } from 'testcafe';\n\n`;
-      fileContent += `fixture('${this.name}')`;
-      fileContent += `.page('${this.environment.url}');\n`;
-      fileContent += `.browserInitTimeout(60000);\n`;
+      fileContent += `fixture('${this.name}')\n`;
+      fileContent += `\t.page('${this.environment.url};')\n`;
       fileContent += `\n`;
       fileContent += `test('${this.name}', async (t) => {\n`;
 
