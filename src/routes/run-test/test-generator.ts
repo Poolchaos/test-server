@@ -20,7 +20,10 @@ export class TestGenerator {
     try {
       let fileContent = '';
       fileContent += `import { Selector } from 'testcafe';\n\n`;
-      fileContent += `fixture('${this.name}').page('${this.environment.url}');\n\n`;
+      fileContent += `fixture('${this.name}')`;
+      fileContent += `.page('${this.environment.url}');\n`;
+      fileContent += `.browserInitTimeout(60000);\n`;
+      fileContent += `\n`;
       fileContent += `test('${this.name}', async (t) => {\n`;
 
       fileContent += `\tconst appSelector = Selector('input[placeholder="Email"]');\n`;
