@@ -39,5 +39,12 @@ spec:
           limits:
             memory: 256Mi
             cpu: 200m
+        volumeMounts:
+        - name: share
+          mountPath: /share
+      volumes:
+      - name: share
+        persistentVolumeClaim:
+          claimName: zai-test-server-claim
       imagePullSecrets:
       - name: zailab.registry
