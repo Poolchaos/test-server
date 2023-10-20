@@ -112,7 +112,6 @@ export class TestRunnerModel {
       };
       
       const config = {
-        disableNativeAutomation: true,
         screenshots: {
           path: "./screenshots/",
           takeOnFails: true
