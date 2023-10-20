@@ -12,7 +12,7 @@ $ `--network host`
 ### Use the Host Machine's IP addess
 $ `ifconfig | grep "inet " | grep -Fv 127.0.0.1 | awk '{print $2}'`
 
-### Use Docker;s Bridge Network
+### Use Docker's Bridge Network (Windows)
 $ `docker network create zai-test`
 
 $ `docker run --network=zai-test zai-test-server:18.14.0`
