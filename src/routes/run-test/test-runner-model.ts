@@ -109,6 +109,7 @@ export class TestRunnerModel {
         hostname: 'localhost',
         port1:    1337,
         port2:    1338,
+        developmentMode: true
       };
       
       const config = {
@@ -116,8 +117,7 @@ export class TestRunnerModel {
           path: "./screenshots/",
           takeOnFails: true
         },
-        // browserInitTimeout: 180000,
-        developmentMode: true
+        browserInitTimeout: 360000,
         // pageLoadTimeout: 600000
       };
       
