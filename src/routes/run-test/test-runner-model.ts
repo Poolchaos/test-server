@@ -257,7 +257,7 @@ export class TestRunnerModel {
       return testReportJsonFileContent;
     } catch(e) {
       console.log(e);
-      this.emptyReportFile();
+      // this.emptyReportFile();
     }
   }
 }
