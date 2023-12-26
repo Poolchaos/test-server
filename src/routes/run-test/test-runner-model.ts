@@ -109,7 +109,7 @@ export class TestRunnerModel {
         hostname: 'localhost',
         port1:    1337,
         port2:    1338,
-        developmentMode: true
+        // developmentMode: true
       };
       
       const config = {
