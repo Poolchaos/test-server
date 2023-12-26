@@ -122,16 +122,18 @@ export class TestRunnerModel {
       };
       
       const testcafe = await createTestCafe(options);
-      const runner = testcafe.createRunner();
+      // const runner = testcafe.createRunner();
 
-      runner.browsers(environment === 'development' ? 'chrome' : 'chromium:headless');
+      // runner.browsers(environment === 'development' ? 'chrome' : 'chromium:headless');
 
       try {
-        await runner
+        await testcafe
+          .createRunner()
           .reporter('json', './static/reports/report.json')
           .src('./tests/' + this.name + '-test.js')
+          .browsers(environment === 'development' ? 'chrome' : 'chromium:headless')
           .run(config);
-          
+
         log('Test Cafe Finished, closing connection');
 
       } catch(e) {
@@ -257,7 +259,7 @@ export class TestRunnerModel {
       return testReportJsonFileContent;
     } catch(e) {
       console.log(e);
-      // this.emptyReportFile();
+      this.emptyReportFile();
     }
   }
 }
