@@ -6,9 +6,9 @@ const getTimestamp = () => {
 };
 // @ts-ignore
 export const log = (value, data?) => {
-  console.log('\u001B[38;5;8m[34m' + getTimestamp() + '\u001B[38;5;8m[0m - ' + value, (data || ''));
+  console.log('\u001B[38;5;32m' + getTimestamp() + '\u001B[0m - ' + value, (data || ''));
 }
 // @ts-ignore
 export const error = (value, data?) => {
-  console.log('\u001B[38;5;9m[34m' + getTimestamp() + '\u001B[38;5;9m[0m - ' + value, (data || ''));
+  console.log('\u001B[38;5;9m' + getTimestamp() + '\u001B[0m - ' + value, (data || ''));
 }

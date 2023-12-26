@@ -1,4 +1,4 @@
-import { log } from './tools/logger';
+import { error, log } from './tools/logger';
 const environment = process.env.NODE_ENV;
 
 log(`App | Loading on ${environment === 'development' ? 'local' : 'dev1'}...`);
@@ -88,8 +88,8 @@ mongoose.connect(
 ).then(() => {
   log(`Connected to ${environment === 'development' ? 'local' : 'dev1'} MongoDB`);
 })
-.catch((error) => {
-  console.error('Error connecting to MongoDB:', error);
+.catch((_error) => {
+  error('Error connecting to MongoDB:', _error);
 });
 
 app.use(logger('dev'));
