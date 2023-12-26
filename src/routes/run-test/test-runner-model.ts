@@ -117,6 +117,7 @@ export class TestRunnerModel {
           takeOnFails: true
         },
         browserInitTimeout: 600000,
+        developmentMode: true
         // pageLoadTimeout: 600000
       };
       
