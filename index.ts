@@ -8,7 +8,7 @@ const getTimestamp = () => {
 };
 // @ts-ignore
 const log = (value, data?) => {
-  console.log('\u001B[34m' + getTimestamp() + '\u001B[0m - ' + value, (data || ''));
+  console.log('\u001B[38;5;32m' + getTimestamp() + '\u001B[0m - ' + value, (data || ''));
 }
 
 // Add a global uncaught exception handler
