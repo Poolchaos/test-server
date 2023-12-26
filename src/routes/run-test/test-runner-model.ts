@@ -66,7 +66,7 @@ export class TestRunnerModel {
             resolve();
           })
           .catch((error) => {
-            console.error('Error updating test result:', error);
+            log('Error updating test result:', error);
             this.emptyReportFile();
           });
 
@@ -201,7 +201,7 @@ export class TestRunnerModel {
         // Wait for the specified retry interval before the next attempt
         await new Promise(resolve => setTimeout(resolve, retryInterval));
       } catch (error) {
-        console.error('Error reading test report JSON file:', error);
+        log('Error reading test report JSON file:', error);
       }
     }
     
@@ -216,9 +216,9 @@ export class TestRunnerModel {
       const jsonString = JSON.stringify(emptyObject, null, 2);
   
       await fs.writeFile(filePath, jsonString, 'utf8');
-      console.log('File has been overwritten with an empty object.');
+      log('File has been overwritten with an empty object.');
     } catch (error) {
-      console.error('Error writing file:', error);
+      log('Error writing file:', error);
     }
   }
 
@@ -229,7 +229,7 @@ export class TestRunnerModel {
 
       // var testReportJsonFileContent = require('../../../static/reports/report.json');
       var testReportJsonFileContent = await this.getTestReportFileContent();
-      console.log(' ::>> testReportJsonFileContent >>>>> ', testReportJsonFileContent);
+      log('Test Report ', testReportJsonFileContent);
 
       if (testReportJsonFileContent) {
         this.emptyReportFile();
