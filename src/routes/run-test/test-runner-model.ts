@@ -2,7 +2,7 @@ import path from 'path';
 import { promises as fs } from 'fs';
 
 import TestResultsModel from '../../models/test-results-model';
-import { log } from '../../tools/logger';
+import { error, log } from '../../tools/logger';
 
 const environment = process.env.NODE_ENV;
 
@@ -66,7 +66,7 @@ export class TestRunnerModel {
             resolve();
           })
           .catch((error) => {
-            log('Error updating test result:', error);
+            error('Error updating test result:', error);
             this.emptyReportFile();
           });
 
@@ -137,7 +137,7 @@ export class TestRunnerModel {
         log('Test Cafe Finished, closing connection');
 
       } catch(e) {
-        log('Error: Encountered an issue while running testCafe test');
+        error('Error: Encountered an issue while running testCafe test');
 
         TestResultsModel
           .findOneAndUpdate({
@@ -168,7 +168,7 @@ export class TestRunnerModel {
       log('Test Cafe conenction closed');
 
     } catch(e) {
-      console.log(e);
+      error(e);
     }
   }
 
@@ -200,8 +200,8 @@ export class TestRunnerModel {
         
         // Wait for the specified retry interval before the next attempt
         await new Promise(resolve => setTimeout(resolve, retryInterval));
-      } catch (error) {
-        log('Error reading test report JSON file:', error);
+      } catch (_error) {
+        error('Error reading test report JSON file:', _error);
       }
     }
     
@@ -217,8 +217,8 @@ export class TestRunnerModel {
   
       await fs.writeFile(filePath, jsonString, 'utf8');
       log('File has been overwritten with an empty object.');
-    } catch (error) {
-      log('Error writing file:', error);
+    } catch (_error) {
+      error('Error writing file:', _error);
     }
   }
 
@@ -258,7 +258,7 @@ export class TestRunnerModel {
 
       return testReportJsonFileContent;
     } catch(e) {
-      console.log(e);
+      error(e);
       this.emptyReportFile();
     }
   }
