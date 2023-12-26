@@ -116,7 +116,7 @@ export class TestRunnerModel {
           path: "./screenshots/",
           takeOnFails: true
         },
-        browserInitTimeout: 600000,
+        browserInitTimeout: 360000,
         developmentMode: true
         // pageLoadTimeout: 600000
       };
