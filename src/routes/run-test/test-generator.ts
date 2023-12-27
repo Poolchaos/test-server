@@ -32,7 +32,7 @@ export class TestGenerator {
       const addStep = (step, index) => {
         if (step.type === 'text') {
           if (step.predefined) {
-            fileContent += `\tawait t.typeText('input[placeholder="${step.config.label}"]', "${step.config.value}");\n`;
+            fileContent += `\tawait t.typeText(\'input[placeholder="${step.config.label}"]\', "${step.config.value}");\n`;
           }
         }
 
@@ -124,7 +124,7 @@ export class TestGenerator {
         fs.mkdirSync(testPath);
       }
   
-      log('Test suite generated. Writing to file...');
+      log('Test suite generated. Writing to file...', fileContent);
       // @ts-ignore
       try {
         await writeFile(filePath, fileContent);

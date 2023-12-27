@@ -1,5 +1,9 @@
 # Zai Test Server
 
+# Prerequisites
+- Start Docker
+- Should be on vpn to connect to dev mongo
+
 ## Build the container
 $ `docker build -t zai-test-server:18.14.0 .`
 

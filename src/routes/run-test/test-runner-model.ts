@@ -67,11 +67,13 @@ export class TestRunnerModel {
           })
           .catch((error) => {
             error('Error updating test result:', error);
+            console.log(' ::>> get empty report file >>>>> 1 ');
             this.emptyReportFile();
           });
 
       } catch(e) {
         console.info('Error:', e);
+        console.log(' ::>> get empty report file >>>>> 2 ');
         this.emptyReportFile();
       }
     });
@@ -85,7 +87,7 @@ export class TestRunnerModel {
             innerStep.image = await fs.readFile(`./screenshots/test-${this.testId}-${this.startTime}/screenshot-${index}-${innerIndex}-${innerStep.name}.png`);
             innerStep.thumbnail = await fs.readFile(`./screenshots/test-${this.testId}-${this.startTime}/thumbnails/screenshot-${index}-${innerIndex}-${innerStep.name}.png`);
           } catch(e) {
-            innerStep.thumbnail = await fs.readFile('./static/no-image.jpg');
+            innerStep.thumbnail = '';
           }
         }));
       } else {
@@ -93,8 +95,7 @@ export class TestRunnerModel {
           step.image = await fs.readFile(`./screenshots/test-${this.testId}-${this.startTime}/screenshot-${index}-${step.name}.png`);
           step.thumbnail = await fs.readFile(`./screenshots/test-${this.testId}-${this.startTime}/thumbnails/screenshot-${index}-${step.name}.png`);
         } catch(e) {
-          // @ts-ignore
-          innerStep.thumbnail = await fs.readFile('./static/no-image.jpg');
+          step.thumbnail = '';
         }
       }
     }));
@@ -109,7 +110,6 @@ export class TestRunnerModel {
         hostname: 'localhost',
         port1:    1337,
         port2:    1338,
-        // developmentMode: true
       };
       
       const config = {
@@ -122,16 +122,15 @@ export class TestRunnerModel {
       };
       
       const testcafe = await createTestCafe(options);
-      // const runner = testcafe.createRunner();
 
-      // runner.browsers(environment === 'development' ? 'chrome' : 'chromium:headless');
+      // disable-dev-shm-usage
 
       try {
         await testcafe
           .createRunner()
           .reporter('json', './static/reports/report.json')
           .src('./tests/' + this.name + '-test.js')
-          .browsers(environment === 'development' ? 'chrome' : 'chromium:headless')
+          .browsers(environment === 'development' ? 'chrome' : 'chromium:headless --disable-dev-shm-usage')
           .run(config);
 
         log('Test Cafe Finished, closing connection');
@@ -229,9 +228,19 @@ export class TestRunnerModel {
 
       // var testReportJsonFileContent = require('../../../static/reports/report.json');
       var testReportJsonFileContent = await this.getTestReportFileContent();
-      log('Test Report ', testReportJsonFileContent);
+      log('Test Report ', JSON.stringify(testReportJsonFileContent, function(key, value) {
+        // Customize the output for specific keys
+        if (key === 'tests' && Array.isArray(value)) {
+          // Log the array elements instead of just [Array]
+          return value.map((test, index) => ({
+            [`Test ${index + 1}`]: test,
+          }));
+        }
+        return value;
+      }, 2));
 
-      if (testReportJsonFileContent) {
+      if (!testReportJsonFileContent) {
+        console.log(' ::>> get empty report file >>>>> 3 ');
         this.emptyReportFile();
       }
 
@@ -240,7 +249,7 @@ export class TestRunnerModel {
       testReportJsonFileContent.startTime = this.startTime;
       // testReportJsonFileContent.generatedTest = testFile;
 
-      // await this.getScreenshots();
+      await this.getScreenshots();
 
       if (!testReportJsonFileContent.fixtures) {
         testReportJsonFileContent.fixtures = [{
@@ -259,6 +268,7 @@ export class TestRunnerModel {
       return testReportJsonFileContent;
     } catch(e) {
       error(e);
+      console.log(' ::>> get empty report file >>>>> 4 ');
       this.emptyReportFile();
     }
   }
