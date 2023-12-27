@@ -34,11 +34,11 @@ spec:
           failureThreshold: 1
         resources:
           requests:
-            memory: 2Gi
-            cpu: 400m
+            memory: 4Gi
+            cpu: 900m
           limits:
-            memory: 2Gi
-            cpu: 400m
+            memory: 4Gi
+            cpu: 900m
         volumeMounts:
         - name: share
           mountPath: /share
