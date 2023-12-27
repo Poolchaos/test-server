@@ -35,10 +35,10 @@ spec:
         resources:
           requests:
             memory: 2Gi
-            cpu: 10000m
+            cpu: 8000m
           limits:
             memory: 2Gi
-            cpu: 10000m
+            cpu: 8000m
         volumeMounts:
         - name: share
           mountPath: /share
