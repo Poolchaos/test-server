@@ -11,7 +11,7 @@
     "dockerize": "npm run kill ^& npm run docker:build ^& npm run docker:start",
     "dockerize-dev": "npm run build-dev ^& npm run kill ^& npm run docker:build ^& npm run docker:start",
     "docker:build": "docker build -t zai-test-server:18.14.0 .",
-    "docker:start": "docker run --network=zai-test -d -p 8000:8000 --name zailab zai-test-server:18.14.0",
+    "docker:start": "docker run --network=zai-test -d -p 8000:8000 --name zailab zai-test-server:18.14.0 --cpus=0.5 -m 2GB",
     "kill": "docker stop zailab & docker rm zailab",
     "prune": "docker container prune",
     "restart": "docker restart zailab"
