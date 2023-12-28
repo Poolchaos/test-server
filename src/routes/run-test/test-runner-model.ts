@@ -130,7 +130,7 @@ export class TestRunnerModel {
           .createRunner()
           .reporter('json', './static/reports/report.json')
           .src('./tests/' + this.name + '-test.js')
-          .browsers(environment === 'development' ? 'chrome' : 'chromium:headless --disable-dev-shm-usage')
+          .browsers(environment === 'development' ? 'chrome' : 'chromium:headless --disable-dev-shm-usage --no-sandbox')
           .run(config);
 
         log('Test Cafe Finished, closing connection');
