@@ -81,26 +81,34 @@ export class TestRunnerModel {
   }
 
   private async getScreenshots(): Promise<void> {
+    let errorCounter = 0;
     await Promise.all(this.steps.map(async (step, index) => {
-      if (step.groupName) {
-        await Promise.all(step.steps.map(async (innerStep, innerIndex) => {
-          try {
-            innerStep.image = await fs.readFile(`${this.shareDrivePath}test-${this.testId}-${this.startTime}/screenshot-${index}-${innerIndex}-${innerStep.name}.png`);
-            innerStep.thumbnail = await fs.readFile(`${this.shareDrivePath}test-${this.testId}-${this.startTime}/thumbnails/screenshot-${index}-${innerIndex}-${innerStep.name}.png`);
-          } catch(e) {
-            innerStep.thumbnail = '';
-            console.log('Error finding screenshot in group due to', e);
-          }
-        }));
-      } else {
+      // if (step.groupName) {
+      //   await Promise.all(step.steps.map(async (innerStep, innerIndex) => {
+      //     try {
+      //       innerStep.image = await fs.readFile(`${this.shareDrivePath}test-${this.testId}-${this.startTime}/screenshot-${index}-${innerIndex}-${innerStep.name}.png`);
+      //       innerStep.thumbnail = await fs.readFile(`${this.shareDrivePath}test-${this.testId}-${this.startTime}/thumbnails/screenshot-${index}-${innerIndex}-${innerStep.name}.png`);
+      //     } catch(e) {
+      //       console.log('Error finding screenshot in group due to', e);
+      //     }
+      //   }));
+      // } else {
         try {
-          step.image = await fs.readFile(`${this.shareDrivePath}test-${this.testId}-${this.startTime}/screenshot-${index}-${step.name}.png`);
-          step.thumbnail = await fs.readFile(`${this.shareDrivePath}test-${this.testId}-${this.startTime}/thumbnails/screenshot-${index}-${step.name}.png`);
+          step.image = `${this.shareDrivePath}test-${this.testId}/${this.startTime}/screenshot-${index}-${step.name}.png`;
+          step.thumbnail = await fs.readFile(`${this.shareDrivePath}test-${this.testId}/${this.startTime}/thumbnails/screenshot-${index}-${step.name}.png`);
         } catch(e) {
-          step.thumbnail = '';
-          console.log('Error finding screenshot due to', e);
+          console.log('Error finding screenshot. Looking for error screenshot', e);
+          try {
+            errorCounter++;
+            step.error = {
+              image: `${this.shareDrivePath}test-${this.testId}/${this.startTime}/errors/${errorCounter}.png`,
+              thumbnail: await fs.readFile(`${this.shareDrivePath}test-${this.testId}/${this.startTime}/errors/thumbnails/${errorCounter}.png`)
+            };
+          } catch (e) {
+            error('Failed to load image due to ', e);
+          }
         }
-      }
+      // }
     }));
   }
 
@@ -118,7 +126,7 @@ export class TestRunnerModel {
       const config = {
         screenshots: {
           path: this.shareDrivePath,
-          pathPattern: `test-${this.testId}-${this.startTime}` + '/${FILE_INDEX}.png',
+          pathPattern: `test-${this.testId}/${this.startTime}` + '/${FILE_INDEX}.png',
           takeOnFails: true,
           thumbnails: true
         },
