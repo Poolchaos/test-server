@@ -118,6 +118,7 @@ export class TestRunnerModel {
       const config = {
         screenshots: {
           path: this.shareDrivePath,
+          pathPattern: `test-${this.testId}-${this.startTime}` + '/${FILE_INDEX}.png',
           takeOnFails: true,
           thumbnails: true
         },

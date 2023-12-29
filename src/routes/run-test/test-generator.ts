@@ -53,6 +53,9 @@ export class TestGenerator {
         }
 
 
+        // take screenshots
+        fileContent += `\tawait t.takeScreenshot({ path: 'test-${this.testId}-${this.startTime}/screenshot-${index}-${step.name}.png' });\n`;
+
 
 
 
@@ -96,9 +99,6 @@ export class TestGenerator {
 
         // }
 
-
-        // take screenshots
-        // fileContent += `\tawait t.takeScreenshot({ path: 'test-${this.testId}-${this.startTime}/screenshot-${index}-${step.name}.png' });\n`;
       }
   
       this.steps.forEach((step, index) => {
