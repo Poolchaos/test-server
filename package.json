@@ -11,10 +11,13 @@
     "dockerize": "npm run kill ^& npm run docker:build ^& npm run docker:start",
     "dockerize-dev": "npm run build-dev ^& npm run kill ^& npm run docker:build ^& npm run docker:start",
     "docker:build": "docker build -t zai-test-server:18.14.0 .",
-    "docker:start": "docker run --network=zai-test -d -p 8000:8000 --name zailab zai-test-server:18.14.0 --cpus=0.5 -m 2GB",
+    "docker:start": "docker run --network=zai-test -d -p 8000:8000 --name zailab --cpus=0.5 -m 2GB -v zai-test-server:/share zai-test-server:18.14.0",
     "kill": "docker stop zailab & docker rm zailab",
     "prune": "docker container prune",
-    "restart": "docker restart zailab"
+    "restart": "docker restart zailab",
+
+    "volume:create": "docker volume create zai-test-server",
+    "volume:remove": "docker volume remove  zai-test-server"
   },
   "dependencies": {
     "child_process": "^1.0.2",
