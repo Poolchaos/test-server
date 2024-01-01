@@ -1,12 +1,10 @@
 import express from 'express';
 import { promises as fs } from 'fs';
-import { error } from 'src/tools/logger';
+import { error } from '../tools/logger';
 
 import TestResultsModel from '../models/test-results-model';
 
 var router = express.Router();
-const environment = process.env.NODE_ENV;
-const shareDrivePath = environment === 'development' ? './screenshots/' : './share/';
 
 router.get('/', async (req, res) => {
   const testId = req.query.testId;
@@ -28,29 +26,17 @@ router.get('/:testId', async (req, res) => {
   try {
     const testResults = await TestResultsModel.findOne({ testId });
     // @ts-ignore
-    let specificTest: any = testResults.results.find(result => result._id.toString() === testResultId);
+    let test: any = testResults.results.find(result => result._id.toString() === testResultId);
 
-    // try {
-    //   specificTest.image = await fs.readFile(`${shareDrivePath}test-${this.testId}-${this.startTime}/errors/screenshot-${index}-${step.name}.png`);
-    //   specificTest.thumbnail = await fs.readFile(`${shareDrivePath}test-${this.testId}-${this.startTime}/errors/thumbnails/screenshot-${index}-${step.name}.png`);
-    // } catch(e) {
-      
-    //   try {
-    //     let image = await fs.readFile(`${shareDrivePath}test-${this.testId}-${this.startTime}/errors/screenshot-${index}-${step.name}.png`);
-    //     let thumbnail = await fs.readFile(`${shareDrivePath}test-${this.testId}-${this.startTime}/errors/thumbnails/screenshot-${index}-${step.name}.png`);
+    // get thumbnail for each image in test
+    try {
+      test.thumbnail = await fs.readFile(test.thumbnail);
+      console.log(' ::>> thumbnail populated ');
+    } catch(e) {
+      error('Failed to load image due to ', e);
+    }
 
-    //     specificTest.error = {
-    //       image,
-    //       thumbnail
-    //     };
-    //     console.log('Error finding screenshot due to', e);
-    //   } catch (e) {
-    //     error('Failed to load image due to ', e);
-    //   }
-    // }
-
-
-    res.json(specificTest);
+    res.json(test);
   } catch (error) {
     console.error('An error occurred:', error);
     res.status(500).json({ error: 'Internal Server Error' });
